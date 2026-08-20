@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carlos Rivadeneyra — Backend Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <div class="bg-blob blob-1" aria-hidden="true"></div>
+    <div class="bg-blob blob-2" aria-hidden="true"></div>
+
+    <!-- ===== NAV ===== -->
+    <header class="site-header">
+      <nav class="navbar">
+        <a href="#inicio" class="logo">PORTAFOLIO WEB</a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#inicio" data-section="inicio">Inicio</a></li>
+          <li><a href="#sobre-mi" data-section="sobre-mi">Sobre mí</a></li>
+          <li><a href="#proyectos" data-section="proyectos">Proyectos</a></li>
+          <li><a href="#stack" data-section="stack">Stack</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ===== HERO ===== -->
+      <section id="inicio" class="hero">
+        <div class="hero-photo reveal">
+          <div class="photo-ring">
+            <!-- Agrega tantas fotos como quieras: se irán alternando solas -->
+            <div class="photo-stack" id="photoStack">
+              <img
+                class="photo-slide is-active"
+                src="Foto_Michel.jpeg"
+                alt="Foto de perfil 1"
+                onerror="
+                  this.src =
+                    'https://placehold.co/460x460/232827/f2f1ed?text=Foto+1'
+                "
+              />
+            </div>
+          </div>
+          <span class="status-badge">
+            <span class="dot"></span> Disponible para trabajar
+          </span>
+        </div>
+
+        <div class="hero-text reveal">
+          <p class="eyebrow">$ whoami</p>
+          <h1>
+            Hola, soy <span class="gradient-text">Carlos Rivadeneyra</span>
+          </h1>
+          <p class="hero-role">Ingenierio de Sistemas e Informatica</p>
+          <p class="hero-desc">
+            Diseño y construyo APIs robustas, servicios backend altamente
+            disponibles y estructuras de datos escalables. Mi prioridad es la
+            lógica del lado del servidor, asegurando rendimiento continuo y
+            arquitecturas tolerantes a fallos.
+          </p>
+          <div class="hero-actions">
+            <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
+            <a
+              href="https://wa.me/938382665"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-wsp btn-icon"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"
+                />
+              </svg>
+            </a>
+
+            <!-- Link de GitHub -->
+            <a
+              href="https://github.com/Carlos-maker-star"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-icon"
+              title="GitHub"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+                />
+              </svg>
+            </a>
+
+            <!-- Link de Correo -->
+            <a
+              href="mailto:rivadeneyracarlos379@gmail.com"
+              class="btn btn-icon"
+              title="Enviar correo"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M1.5 4.5h21a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 18V6a1.5 1.5 0 0 1 1.5-1.5zm0 3v9.5h21V7.5l-10.5 6.562L1.5 7.5zm10.5 4.562L21.75 6H2.25l9.75 6.062z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SOBRE MI ===== -->
+      <section id="sobre-mi" class="section">
+        <p class="section-label">Sobre mí</p>
+        <div class="about-grid">
+          <div class="about-card glass reveal">
+            <h2>Construyo lo que no se ve, pero sostiene todo</h2>
+            <p>
+              Llegué al backend para entender qué pasa detrás de pantalla. En
+              Ingeniería de Sistemas descubrí que me apasiona la lógica del
+              servidor, el diseño de arquitecturas y la persistencia de datos
+              sobre la interfaz visual
+            </p>
+            <p>
+              Me motiva la estabilidad y el rendimiento. Optimizo consultas SQL,
+              aseguro endpoints REST con Spring Boot y estructuro la seguridad
+              para lograr sistemas rápidos y confiables. Aporto trabajo en
+              equipo, metodologías ágiles y constante aprendizaje.
+            </p>
+          </div>
+          <div class="about-terminal reveal">
+            <div class="terminal-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <pre
+              class="terminal-body"
+              id="terminalBody"
+              data-code='const dev = {
+  nombre: "Carlos Rivadeneyra",
+  rol: "Backend Developer",
+  edad: "22 años",
+  carrera: "Ingeniería de Sistemas",
+  pais: "Perú",
+  ciudad: "Chiclayo",
+  stack: ["Java", "PostgreSQL", "JavaScript"],
+  disponible: true
+};
+
+console.log(dev.rol + " listo ✅");'
+            ><code id="terminalCode"></code><span class="terminal-cursor" id="terminalCursor">▍</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROYECTOS ===== -->
+      <section id="proyectos" class="section">
+        <p class="section-label">Proyectos</p>
+        <h2 class="section-title reveal">Sistemas que he construido</h2>
+
+        <div class="projects-grid">
+          <article class="project-card glass reveal">
+            <div class="project-top">
+              <span class="project-emoji">⚡</span>
+              <div class="project-tags">
+                <span>Java</span><span>JavaScript</span><span>MySql</span
+                ><span>Oracle Cloud</span>
+              </div>
+            </div>
+            <h3>Sistema Integral de Gestión de Producción de Correas</h3>
+            <p>
+              BeltCore es un sistema integral que digitaliza el control de
+              producción de correas industriales. Centraliza el registro de
+              órdenes, el seguimiento del proceso y el stock de materia prima,
+              reduciendo tareas manuales y optimizando la toma de decisiones con
+              datos en tiempo real.
+            </p>
+            <div class="project-links">
+              <a href="http://159.112.132.125:8080/BeltCoreCG_war_exploded/"
+                >Ver demo →</a
+              >
+            </div>
+          </article>
+
+          <article class="project-card glass reveal">
+            <div class="project-top">
+              <span class="project-emoji">🗄️</span>
+              <div class="project-tags">
+                <span>PostgreSQL</span><span>Java</span><span>Spring Boot</span>
+              </div>
+            </div>
+            <h3>API de Gestión de Inventario</h3>
+            <p>
+              API Backend que digitaliza la gestión automatizada de inventarios.
+              Centraliza el control de stock, el seguimiento de movimientos y la
+              generación de datos en tiempo real. Implementa autenticación y
+              autorización robusta con Spring Security y JWT, reduciendo tareas
+              manuales mediante endpoints seguros e integrables.
+            </p>
+            <div class="project-links">
+              <a href="#">Ver demo →</a>
+              <a href="#">Código →</a>
+            </div>
+          </article>
+
+          <article class="project-card glass reveal">
+            <div class="project-top">
+              <span class="project-emoji">🐳</span>
+              <div class="project-tags">
+                <span>Docker</span><span>CI/CD</span>
+              </div>
+            </div>
+            <h3>Nombre del proyecto</h3>
+            <p>
+              Breve descripción del sistema: qué problema resuelve, cómo está
+              diseñada la arquitectura y qué lo hace escalable.
+            </p>
+            <div class="project-links">
+              <a href="#">Ver demo →</a>
+              <a href="#">Código →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===== STACK / HABILIDADES ===== -->
+      <section id="stack" class="section">
+        <p class="section-label">Stack</p>
+        <h2 class="section-title reveal">Con qué construyo</h2>
+
+        <div class="stack-grid">
+          <div class="stack-pill reveal">
+            <span class="pill-dot" style="background: #8fe3c5"></span>Java
+          </div>
+          <div class="stack-pill reveal">
+            <span class="pill-dot" style="background: #ff9b85"></span>PostgreSQL
+          </div>
+          <div class="stack-pill reveal">
+            <span class="pill-dot" style="background: #7fd8c0"></span>SqlServer
+          </div>
+          <div class="stack-pill reveal">
+            <span class="pill-dot" style="background: #8fe3c5"></span>MySQL
+          </div>
+          <div class="stack-pill reveal">
+            <span class="pill-dot" style="background: #ff9b85"></span>JavaScript
+          </div>
+          <div class="stack-pill reveal">
+            <span class="pill-dot" style="background: #7fd8c0"></span>Spring
+            Boot
+          </div>
+          <div class="stack-pill reveal">
+            <span class="pill-dot" style="background: #ff9b85"></span>Git
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        © <span id="year"></span> Carlos Rivadeneyra — construido con HTML &amp;
+        CSS
+      </p>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      const navToggle = document.getElementById("navToggle");
+      const navLinks = document.getElementById("navLinks");
+      navToggle.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
+        navToggle.classList.toggle("open");
+        navToggle.setAttribute("aria-expanded", isOpen);
+      });
+      navLinks.querySelectorAll("a").forEach((link) =>
+        link.addEventListener("click", () => {
+          navLinks.classList.remove("open");
+          navToggle.classList.remove("open");
+        }),
+      );
+
+      const header = document.querySelector(".site-header");
+      const progressBar = document.getElementById("scrollProgress");
+      window.addEventListener("scroll", () => {
+        header.classList.toggle("scrolled", window.scrollY > 10);
+        const docHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+        progressBar.style.width = progress + "%";
+      });
+
+      /* ---- Aparición al hacer scroll, con stagger por grupo ---- */
+      const groups = document.querySelectorAll(".projects-grid, .stack-grid");
+      groups.forEach((group) => {
+        group.querySelectorAll(".reveal").forEach((el, i) => {
+          el.style.transitionDelay = i * 90 + "ms";
+        });
+      });
+
+      const revealEls = document.querySelectorAll(".reveal");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      revealEls.forEach((el) => observer.observe(el));
+
+      /* ---- Efecto de escritura en la terminal ---- */
+      const terminalWrap = document.getElementById("terminalBody");
+      const terminalCode = document.getElementById("terminalCode");
+      const terminalCursor = document.getElementById("terminalCursor");
+      let typed = false;
+      const fullCode = terminalWrap.dataset.code;
+
+      function typeCode() {
+        if (typed) return;
+        typed = true;
+        let i = 0;
+        const speed = 18;
+        (function step() {
+          if (i <= fullCode.length) {
+            terminalCode.textContent = fullCode.slice(0, i);
+            i++;
+            setTimeout(step, speed);
+          } else {
+            terminalCursor.classList.add("blink");
+          }
+        })();
+      }
+      const terminalObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              typeCode();
+              terminalObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.4 },
+      );
+      terminalObserver.observe(terminalWrap);
+
+      /* ---- Tilt 3D en tarjetas de proyecto ---- */
+      const tiltCards = document.querySelectorAll(".project-card");
+      tiltCards.forEach((card) => {
+        card.addEventListener("mousemove", (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const rotateX = (y / rect.height - 0.5) * -8;
+          const rotateY = (x / rect.width - 0.5) * 8;
+          card.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "";
+        });
+      });
+
+      /* ---- Botones magnéticos ---- */
+      const magneticEls = document.querySelectorAll(".btn, .stack-pill");
+      magneticEls.forEach((el) => {
+        el.addEventListener("mousemove", (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          el.style.transform = `translate(${x * 0.18}px, ${y * 0.35}px)`;
+        });
+        el.addEventListener("mouseleave", () => {
+          el.style.transform = "";
+        });
+      });
+
+      /* ---- Crossfade + zoom automático entre varias fotos ---- */
+      const photoSlides = document.querySelectorAll("#photoStack .photo-slide");
+      if (photoSlides.length > 1) {
+        let currentPhoto = 0;
+        setInterval(() => {
+          photoSlides[currentPhoto].classList.remove("is-active");
+          currentPhoto = (currentPhoto + 1) % photoSlides.length;
+          photoSlides[currentPhoto].classList.add("is-active");
+        }, 4500);
+      }
+
+      /* ---- Resaltar link activo del nav según sección visible ---- */
+      const sections = document.querySelectorAll("main section[id]");
+      const navAnchors = document.querySelectorAll(
+        ".nav-links a[data-section]",
+      );
+      const navObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              navAnchors.forEach((a) => a.classList.remove("active"));
+              const active = document.querySelector(
+                `.nav-links a[data-section="${entry.target.id}"]`,
+              );
+              if (active) active.classList.add("active");
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+      sections.forEach((s) => navObserver.observe(s));
+    </script>
+  </body>
+</html>
