@@ -1,136 +1,221 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Carlos Rivadeneyra — Backend Developer</title>
+    <meta
+      name="description"
+      content="Portafolio de Carlos Rivadeneyra, Backend Developer e Ingeniero de Sistemas. Proyectos en Java, Spring Boot, Angular y bases de datos SQL."
+    />
+    <meta name="theme-color" content="#151918" />
+
+    <!-- Aplica el tema guardado antes de pintar, para evitar parpadeos -->
+    <script>
+      (function () {
+        var saved = null;
+        try {
+          saved = localStorage.getItem("theme");
+        } catch (e) {}
+        var prefersLight =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: light)").matches;
+        document.documentElement.dataset.theme =
+          saved || (prefersLight ? "light" : "dark");
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-
+    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
     <div class="bg-blob blob-1" aria-hidden="true"></div>
     <div class="bg-blob blob-2" aria-hidden="true"></div>
 
     <!-- ===== NAV ===== -->
     <header class="site-header">
       <nav class="navbar">
-        <a href="#inicio" class="logo">PORTAFOLIO WEB</a>
-        <button
-          class="nav-toggle"
-          id="navToggle"
-          aria-label="Abrir menú"
-          aria-expanded="false"
-        >
-          <span></span><span></span><span></span>
-        </button>
+        <a href="#inicio" class="logo" aria-label="Inicio">
+          <span class="logo-bracket">&lt;</span>Carlos<span class="logo-bracket"
+            >&nbsp;/&gt;</span
+          >
+        </a>
+
         <ul class="nav-links" id="navLinks">
           <li><a href="#inicio" data-section="inicio">Inicio</a></li>
           <li><a href="#sobre-mi" data-section="sobre-mi">Sobre mí</a></li>
           <li><a href="#proyectos" data-section="proyectos">Proyectos</a></li>
           <li><a href="#stack" data-section="stack">Stack</a></li>
+          <li><a href="#contacto" data-section="contacto">Contacto</a></li>
         </ul>
+
+        <div class="nav-actions">
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Cambiar a modo claro"
+            title="Cambiar tema"
+          >
+            <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+              />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+          <button
+            class="nav-toggle"
+            id="navToggle"
+            type="button"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            aria-controls="navLinks"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
       </nav>
     </header>
 
     <main>
       <!-- ===== HERO ===== -->
       <section id="inicio" class="hero">
-        <div class="hero-photo reveal">
+        <div class="hero-photo intro" style="--d: 0.1s">
           <div class="photo-ring">
             <!-- Agrega tantas fotos como quieras: se irán alternando solas -->
             <div class="photo-stack" id="photoStack">
               <img
                 class="photo-slide is-active"
                 src="Foto_Michel.jpeg"
-                alt="Foto de perfil 1"
+                alt="Foto de perfil de Carlos Rivadeneyra"
                 onerror="
                   this.src =
                     'https://placehold.co/460x460/232827/f2f1ed?text=Foto+1'
                 "
               />
             </div>
+            <span class="float-chip chip-a" aria-hidden="true">{ API }</span>
+            <span class="float-chip chip-b" aria-hidden="true">&lt;/&gt;</span>
           </div>
           <span class="status-badge">
-            <span class="dot"></span> Backend Developer
+            <span class="dot"></span> Disponible para trabajar
           </span>
         </div>
 
-        <div class="hero-text reveal">
-          <p class="eyebrow">$ whoami</p>
-          <h1>
+        <div class="hero-text">
+          <p class="eyebrow intro" style="--d: 0.2s">$ whoami</p>
+          <h1 class="intro" style="--d: 0.3s">
             Hola, soy <span class="gradient-text">Carlos Rivadeneyra</span>
           </h1>
-          <p class="hero-role">Ingeniero de Sistemas e Informatica</p>
-          <p class="hero-desc">
+          <p class="hero-role intro" style="--d: 0.4s">
+            Ingeniero de Sistemas e Informática
+          </p>
+          <p class="hero-typed intro" style="--d: 0.45s" aria-hidden="true">
+            <span class="typed-prompt">&gt;</span>
+            <span id="typedRole">Backend Developer</span
+            ><span class="typed-caret">▍</span>
+          </p>
+          <p class="hero-desc intro" style="--d: 0.5s">
             Diseño y construyo APIs robustas, servicios backend altamente
             disponibles y estructuras de datos escalables. Mi prioridad es la
             lógica del lado del servidor, asegurando rendimiento continuo y
             arquitecturas tolerantes a fallos.
           </p>
-          <div class="hero-actions">
-            <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
-            <a
-              href="https://wa.me/938382665"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-wsp btn-icon"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"
-                />
-              </svg>
-            </a>
 
-            <!-- Link de GitHub -->
-            <a
-              href="https://github.com/Carlos-maker-star"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-icon"
-              title="GitHub"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
-                />
+          <div class="hero-actions intro" style="--d: 0.6s">
+            <a href="#proyectos" class="btn btn-primary magnetic">
+              Ver proyectos
+              <svg class="btn-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             </a>
+            <a href="#contacto" class="btn btn-ghost magnetic">Contactar</a>
 
-            <!-- Link de Correo -->
-            <a
-              href="mailto:rivadeneyracarlos379@gmail.com"
-              class="btn btn-icon"
-              title="Enviar correo"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
+            <div class="social-row">
+              <a
+                href="https://wa.me/51938382665"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-icon btn-wsp magnetic"
+                title="WhatsApp"
+                aria-label="WhatsApp"
               >
-                <path
-                  d="M1.5 4.5h21a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 18V6a1.5 1.5 0 0 1 1.5-1.5zm0 3v9.5h21V7.5l-10.5 6.562L1.5 7.5zm10.5 4.562L21.75 6H2.25l9.75 6.062z"
-                />
-              </svg>
-            </a>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://github.com/Carlos-maker-star"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-icon magnetic"
+                title="GitHub"
+                aria-label="GitHub"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="mailto:rivadeneyracarlos379@gmail.com"
+                class="btn-icon magnetic"
+                title="Enviar correo"
+                aria-label="Enviar correo"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M1.5 4.5h21a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 18V6a1.5 1.5 0 0 1 1.5-1.5zm0 3v9.5h21V7.5l-10.5 6.562L1.5 7.5zm10.5 4.562L21.75 6H2.25l9.75 6.062z"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
+
+          <!-- Los números se calculan solos a partir de las secciones de abajo -->
+          <dl class="hero-stats intro" style="--d: 0.7s">
+            <div class="stat">
+              <dt>Proyectos</dt>
+              <dd><span class="counter" id="statProjects">0</span></dd>
+            </div>
+            <div class="stat">
+              <dt>Demos en vivo</dt>
+              <dd><span class="counter" id="statDemos">0</span></dd>
+            </div>
+            <div class="stat">
+              <dt>Tecnologías</dt>
+              <dd><span class="counter" id="statTech">0</span></dd>
+            </div>
+          </dl>
         </div>
+
+        <a href="#sobre-mi" class="scroll-hint" aria-label="Bajar a Sobre mí">
+          <span class="mouse"><span class="wheel"></span></span>
+        </a>
       </section>
+
+      <!-- Cinta de tecnologías en movimiento -->
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track" id="marqueeTrack"></div>
+      </div>
 
       <!-- ===== SOBRE MI ===== -->
       <section id="sobre-mi" class="section">
-        <p class="section-label">Sobre mí</p>
+        <p class="section-label reveal">01 · Sobre mí</p>
         <div class="about-grid">
           <div class="about-card glass reveal">
             <h2>Construyo lo que no se ve, pero sostiene todo</h2>
@@ -146,10 +231,16 @@
               para lograr sistemas rápidos y confiables. Aporto trabajo en
               equipo, metodologías ágiles y constante aprendizaje.
             </p>
+            <ul class="about-facts">
+              <li><span>📍</span> Chiclayo, Perú</li>
+              <li><span>🎓</span> Ingeniería de Sistemas</li>
+              <li><span>⚙️</span> APIs REST · Seguridad · SQL</li>
+            </ul>
           </div>
           <div class="about-terminal reveal">
             <div class="terminal-bar">
               <span></span><span></span><span></span>
+              <p class="terminal-title">dev.js</p>
             </div>
             <pre
               class="terminal-body"
@@ -172,168 +263,378 @@ console.log(dev.rol + " listo ✅");'
 
       <!-- ===== PROYECTOS ===== -->
       <section id="proyectos" class="section">
-        <p class="section-label">Proyectos</p>
-        <h2 class="section-title reveal">Sistemas que he construido</h2>
+        <p class="section-label reveal">02 · Proyectos</p>
+        <div class="section-head">
+          <h2 class="section-title reveal">Sistemas que he construido</h2>
+          <div
+            class="filters reveal"
+            role="group"
+            aria-label="Filtrar proyectos por tecnología"
+          >
+            <button class="filter is-active" data-filter="all" aria-pressed="true">
+              Todos
+            </button>
+            <button class="filter" data-filter="angular" aria-pressed="false">
+              Angular
+            </button>
+            <button class="filter" data-filter="java" aria-pressed="false">
+              Java · Spring
+            </button>
+            <button class="filter" data-filter="db" aria-pressed="false">
+              Bases de datos
+            </button>
+          </div>
+        </div>
 
-        <div class="projects-grid">
-          <article class="project-card glass reveal">
-            <div class="project-top">
-              <span class="project-emoji">⚡</span>
+        <div class="projects-grid" id="projectsGrid">
+          <!-- BeltCore -->
+          <article class="project-card reveal" data-tags="java db">
+            <div class="project-preview pv-belt" aria-hidden="true">
+              <div class="pv-title">Órdenes en producción</div>
+              <div class="pv-bar"><span>Corte</span><i style="--w: 86%"></i></div>
+              <div class="pv-bar"><span>Ensamble</span><i style="--w: 62%"></i></div>
+              <div class="pv-bar"><span>Control</span><i style="--w: 38%"></i></div>
+            </div>
+            <div class="project-body">
+              <div class="project-head">
+                <span class="project-icon">
+                  <svg viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" /></svg>
+                </span>
+                <h3>Sistema Integral de Gestión de Producción de Correas</h3>
+              </div>
+              <p>
+                BeltCore es un sistema integral que digitaliza el control de
+                producción de correas industriales. Centraliza el registro de
+                órdenes, el seguimiento del proceso y el stock de materia prima,
+                reduciendo tareas manuales y optimizando la toma de decisiones
+                con datos en tiempo real.
+              </p>
               <div class="project-tags">
-                <span>Java</span><span>JavaScript</span><span>MySql</span
+                <span>Java</span><span>JavaScript</span><span>MySQL</span
                 ><span>Oracle Cloud</span>
               </div>
-            </div>
-            <h3>Sistema Integral de Gestión de Producción de Correas</h3>
-            <p>
-              BeltCore es un sistema integral que digitaliza el control de
-              producción de correas industriales. Centraliza el registro de
-              órdenes, el seguimiento del proceso y el stock de materia prima,
-              reduciendo tareas manuales y optimizando la toma de decisiones con
-              datos en tiempo real.
-            </p>
-            <div class="project-links">
-              <a
-                target="_blank"
-                href="http://159.112.132.125:8080/BeltCoreCG_war_exploded/"
-                >Ver demo →</a
-              >
+              <div class="project-links">
+                <a
+                  class="link-demo"
+                  data-demo
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="http://159.112.132.125:8080/BeltCoreCG_war_exploded/"
+                  >Ver demo <span aria-hidden="true">↗</span></a
+                >
+              </div>
             </div>
           </article>
 
-          <article class="project-card glass reveal">
-            <div class="project-top">
-              <span class="project-emoji">🗄️</span>
+          <!-- API Inventario -->
+          <article class="project-card reveal" data-tags="java db">
+            <div class="project-preview pv-api" aria-hidden="true">
+              <div class="pv-req">
+                <b>GET</b> /api/productos <em>200 OK</em>
+              </div>
+              <pre class="pv-json">{
+  "sku": "A-102",
+  "stock": 48,
+  "movimiento": "ENTRADA"
+}</pre>
+              <span class="pv-lock">🔒 JWT</span>
+            </div>
+            <div class="project-body">
+              <div class="project-head">
+                <span class="project-icon">
+                  <svg viewBox="0 0 24 24">
+                    <ellipse cx="12" cy="5" rx="9" ry="3" />
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                    <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
+                  </svg>
+                </span>
+                <h3>API de Gestión de Inventario</h3>
+              </div>
+              <p>
+                API Backend que digitaliza la gestión automatizada de
+                inventarios. Centraliza el control de stock y el seguimiento de
+                movimientos. Implementa autenticación y autorización robusta con
+                Spring Security y JWT, reduciendo tareas manuales mediante
+                endpoints seguros e integrables.
+              </p>
               <div class="project-tags">
                 <span>PostgreSQL</span><span>Java</span><span>Spring Boot</span>
               </div>
-            </div>
-            <h3>API de Gestión de Inventario</h3>
-            <p>
-              API Backend que digitaliza la gestión automatizada de inventarios.
-              Centraliza el control de stock, el seguimiento de movimientos.
-              Implementa autenticación y autorización robusta con Spring
-              Security y JWT, reduciendo tareas manuales mediante endpoints
-              seguros e integrables.
-            </p>
-            <div class="project-links">
-              <a
-                href="https://github.com/Carlos-maker-star/ApiGestionInventario"
-                target="_blank"
-                >Código →</a
-              >
-            </div>
-          </article>
-
-          <article class="project-card glass reveal upcoming-card">
-            <div class="project-top">
-              <span class="project-emoji">💳</span>
-              <div class="project-tags">
-                <span>TypeScript</span><span>HTML5</span
-                ><span>Tailwind CSS</span><span>Angular</span>
+              <div class="project-links">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/ApiGestionInventario"
+                  >Ver código <span aria-hidden="true">↗</span></a
+                >
               </div>
             </div>
-            <h3>Billetera Digital Personal</h3>
-            <p>
-              Aplicación SPA para la gestión de billetera digital personal.
-              Centraliza el control de saldo, depósitos y retiros con validación
-              de fondos en tiempo real e historial por usuario. Implementa
-              estado reactivo con Angular Signals y persistencia de sesión,
-              ofreciendo una experiencia fluida e interactiva.
-            </p>
-            <div class="project-links">
-              <a
-                target="_blank"
-                href="https://billetera-digital-beta.vercel.app/auth"
-                >Ver demo →</a
-              >
-              <a
-                target="_blank"
-                href="https://github.com/Carlos-maker-star/BilleteraDigital"
-                >Ver codigo →</a
-              >
+          </article>
+
+          <!-- Billetera -->
+          <article class="project-card reveal" data-tags="angular">
+            <div class="project-preview pv-wallet" aria-hidden="true">
+              <div class="pv-balance">
+                <small>Saldo disponible</small>
+                <strong>S/ 1,250.00</strong>
+              </div>
+              <svg class="pv-spark" viewBox="0 0 200 60" preserveAspectRatio="none">
+                <path d="M0 48 L25 40 L50 44 L75 28 L100 32 L125 18 L150 24 L175 10 L200 14" />
+              </svg>
+              <div class="pv-tx">
+                <span class="in">+ Depósito</span><span class="out">− Retiro</span>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-head">
+                <span class="project-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+                    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+                  </svg>
+                </span>
+                <h3>Billetera Digital Personal</h3>
+              </div>
+              <p>
+                Aplicación SPA para la gestión de billetera digital personal.
+                Centraliza el control de saldo, depósitos y retiros con
+                validación de fondos en tiempo real e historial por usuario.
+                Implementa estado reactivo con Angular Signals y persistencia de
+                sesión, ofreciendo una experiencia fluida e interactiva.
+              </p>
+              <div class="project-tags">
+                <span>Angular</span><span>TypeScript</span
+                ><span>Tailwind CSS</span><span>HTML5</span>
+              </div>
+              <div class="project-links">
+                <a
+                  class="link-demo"
+                  data-demo
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://billetera-digital-beta.vercel.app/auth"
+                  >Ver demo <span aria-hidden="true">↗</span></a
+                >
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/BilleteraDigital"
+                  >Ver código <span aria-hidden="true">↗</span></a
+                >
+              </div>
             </div>
           </article>
 
-          <article class="project-card glass reveal upcoming-card">
-            <div class="project-top">
-              <span class="project-emoji">🧾</span>
+          <!-- Facturación -->
+          <article class="project-card reveal" data-tags="angular java db">
+            <div class="project-preview pv-invoice" aria-hidden="true">
+              <div class="pv-paper">
+                <div class="pv-paper-head">
+                  <b>F001-000123</b><span class="pv-pdf">PDF</span>
+                </div>
+                <i style="--w: 90%"></i>
+                <i style="--w: 70%"></i>
+                <i style="--w: 80%"></i>
+                <div class="pv-total"><span>Total</span><b>S/ 354.00</b></div>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-head">
+                <span class="project-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+                    <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+                    <path d="M12 17.5v-11" />
+                  </svg>
+                </span>
+                <h3>Sistema de Facturación Web</h3>
+              </div>
+              <p>
+                Aplicación SPA Full-Stack para la emisión, gestión y anulación
+                de comprobantes de pago. Integra administración de catálogo de
+                productos, generación y descarga de comprobantes en PDF, y
+                consumo de APIs RESTful desacopladas con backend en Spring Boot
+                y Supabase. Desplegada de forma independiente entre Vercel y
+                Render.
+              </p>
               <div class="project-tags">
                 <span>Angular</span><span>TypeScript</span
                 ><span>Spring Boot</span><span>Supabase</span>
               </div>
-            </div>
-            <h3>Sistema de Facturación Web</h3>
-            <p>
-              Aplicación SPA Full-Stack para la emisión, gestión y anulación de
-              comprobantes de pago. Integra administración de catálogo de
-              productos, generación y descarga de comprobantes en formato PDF, y
-              consumo de APIs RESTful desacopladas con backend en Spring Boot y
-              Supabase. Desplegada de forma independiente entre Vercel y Render.
-              Acceso demo: <strong>admin</strong> / <strong>123456</strong>
-              (La primera carga puede tardar unos segundos mientras el servidor
-              se activa).
-            </p>
-            <div class="project-links">
-              <a
-                target="_blank"
-                href="https://app-facturacion-uq12.vercel.app/login"
-                >Ver demo →</a
-              >
-              <a
-                target="_blank"
-                href="https://github.com/Carlos-maker-star/AppFacturacion"
-                >Ver codigo →</a
-              >
+              <p class="project-access">
+                <span>Acceso demo:</span> <code>admin</code> / <code>123456</code>
+                <small>La primera carga puede tardar unos segundos mientras el
+                  servidor se activa.</small>
+              </p>
+              <div class="project-links">
+                <a
+                  class="link-demo"
+                  data-demo
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://app-facturacion-uq12.vercel.app/login"
+                  >Ver demo <span aria-hidden="true">↗</span></a
+                >
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/AppFacturacion"
+                  >Ver código <span aria-hidden="true">↗</span></a
+                >
+              </div>
             </div>
           </article>
 
-          <article class="project-card glass reveal upcoming-card">
-            <div class="project-top">
-              <span class="project-emoji">🎫</span>
+          <!-- Tickets -->
+          <article class="project-card reveal" data-tags="angular java db">
+            <div class="project-preview pv-tickets" aria-hidden="true">
+              <div class="pv-ticket">
+                <span>#142 · Impresora sin red</span><em class="st-open">Abierto</em>
+              </div>
+              <div class="pv-ticket">
+                <span>#139 · Acceso a VPN</span><em class="st-progress">En progreso</em>
+              </div>
+              <div class="pv-ticket">
+                <span>#131 · Correo bloqueado</span><em class="st-done">Resuelto</em>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-head">
+                <span class="project-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                    <path d="M13 5v2M13 17v2M13 11v2" />
+                  </svg>
+                </span>
+                <h3>Sistema de Tickets de Incidencia</h3>
+              </div>
+              <p>
+                Aplicación web de mesa de ayuda donde los usuarios reportan
+                incidencias y los técnicos las gestionan según su rol y estado,
+                incluyendo comentarios, notas internas, historial de cambios y
+                dashboard de métricas. Desplegado en Render y Vercel.
+              </p>
               <div class="project-tags">
                 <span>Angular</span><span>TypeScript</span
                 ><span>Spring Boot</span><span>Supabase</span>
               </div>
-            </div>
-            <h3>Sistema de Tickets de Incidencia</h3>
-            <p>
-              Aplicación web de mesa de ayuda donde los usuarios reportan
-              incidencias y los técnicos las gestionan según su rol y estado,
-              incluyendo comentarios, notas internas, historial de cambios y
-              dashboard de métricas. Está desplegado en Render y Vercel. Acceso:
-              <strong>demo@ticket.com</strong> / <strong>demo2026</strong>. (La
-              primera carga puede tardar unos segundos mientras el servidor se
-              activa).
-            </p>
-            <div class="project-links">
-              <a target="_blank" href="https://app-tickets-zeta.vercel.app/"
-                >Ver demo →</a
-              >
-              <a
-                target="_blank"
-                href="https://github.com/Carlos-maker-star/app-tickets"
-                >Ver codigo →</a
-              >
+              <p class="project-access">
+                <span>Acceso demo:</span> <code>demo@ticket.com</code> /
+                <code>demo2026</code>
+                <small>La primera carga puede tardar unos segundos mientras el
+                  servidor se activa.</small>
+              </p>
+              <div class="project-links">
+                <a
+                  class="link-demo"
+                  data-demo
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://app-tickets-zeta.vercel.app/"
+                  >Ver demo <span aria-hidden="true">↗</span></a
+                >
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/app-tickets"
+                  >Ver código <span aria-hidden="true">↗</span></a
+                >
+              </div>
             </div>
           </article>
 
-          <article class="project-card glass reveal upcoming-card">
-            <div class="project-top">
-              <span class="project-emoji">🚀</span>
+          <!-- HotelDesk -->
+          <article class="project-card reveal" data-tags="angular">
+            <div class="project-preview pv-hotel" aria-hidden="true">
+              <div class="pv-kpi">
+                <div class="pv-ring" style="--target: 78">
+                  <span>78%</span>
+                </div>
+                <small>Ocupación hoy</small>
+              </div>
+              <!-- l = libre, r = reservada, o = ocupada -->
+              <div
+                class="pv-cal"
+                data-rooms="101,102,201,202"
+                data-pattern="ooollrr|llrrroo|oooooll|llloorr"
+              ></div>
+            </div>
+            <div class="project-body">
+              <div class="project-head">
+                <span class="project-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M2 4v16" />
+                    <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+                    <path d="M2 17h20" />
+                    <path d="M6 8v9" />
+                  </svg>
+                </span>
+                <h3>HotelDesk · Sistema de Reservas de Hotel</h3>
+              </div>
+              <p>
+                Sistema web para gestionar las reservas de un hotel. Permite
+                registrar reservas, confirmarlas, hacer check-in y check-out,
+                cobrar pagos y ver qué habitaciones están libres en un
+                calendario. Incluye un panel con la ocupación y los ingresos del
+                día. Funciona por completo en el navegador y guarda los datos en
+                localStorage.
+              </p>
+              <div class="project-tags">
+                <span>Angular</span><span>TypeScript</span
+                ><span>Angular Material</span><span>Tailwind CSS</span>
+              </div>
+              <p class="project-access">
+                <span>Acceso demo:</span> <code>admin</code> /
+                <code>admin123</code>
+              </p>
+              <div class="project-links">
+                <a
+                  class="link-demo"
+                  data-demo
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://app-reservas-inky.vercel.app"
+                  >Ver demo <span aria-hidden="true">↗</span></a
+                >
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/app-reservas"
+                  >Ver código <span aria-hidden="true">↗</span></a
+                >
+              </div>
+            </div>
+          </article>
+
+          <!-- Próximamente -->
+          <article class="project-card reveal is-upcoming" data-tags="all">
+            <div class="project-preview pv-soon" aria-hidden="true">
+              <span class="pv-soon-code">nuevo_proyecto()<i>▍</i></span>
+            </div>
+            <div class="project-body">
+              <div class="project-head">
+                <span class="project-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                    <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+                    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+                    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+                  </svg>
+                </span>
+                <h3>Nuevas Soluciones Tecnológicas</h3>
+              </div>
+              <p>
+                Actualmente diseñando y desarrollando proyectos backend y web
+                enfocados en arquitecturas escalables, automatización de
+                procesos y optimización de software. ¡Nuevos repositorios y
+                demos en vivo próximamente!
+              </p>
               <div class="project-tags">
                 <span>En desarrollo</span><span>Innovación</span>
               </div>
-            </div>
-            <h3>Nuevas Soluciones Tecnológicas</h3>
-            <p>
-              Actualmente diseñando y desarrollando proyectos backend y web
-              enfocados en arquitecturas escalables, automatización de procesos
-              y optimización de software. ¡Nuevos repositorios y demos en vivo
-              próximamente!
-            </p>
-            <div class="project-links">
-              <span class="upcoming-status">⚡ Próximamente</span>
+              <div class="project-links">
+                <span class="upcoming-status">⚡ Próximamente</span>
+              </div>
             </div>
           </article>
         </div>
@@ -341,41 +642,73 @@ console.log(dev.rol + " listo ✅");'
 
       <!-- ===== STACK / HABILIDADES ===== -->
       <section id="stack" class="section">
-        <p class="section-label">Stack</p>
+        <p class="section-label reveal">03 · Stack</p>
         <h2 class="section-title reveal">Con qué construyo</h2>
 
         <div class="stack-grid">
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #8fe3c5"></span>Java
+          <div class="stack-group glass reveal">
+            <h3><span class="stack-num">01</span> Backend</h3>
+            <div class="stack-pills">
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>Java</span>
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>Spring Boot</span>
+            </div>
           </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #ff9b85"></span>PostgreSQL
+          <div class="stack-group glass reveal">
+            <h3><span class="stack-num">02</span> Frontend</h3>
+            <div class="stack-pills">
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>Angular</span>
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>JavaScript</span>
+            </div>
           </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #7fd8c0"></span>SqlServer
+          <div class="stack-group glass reveal">
+            <h3><span class="stack-num">03</span> Bases de datos</h3>
+            <div class="stack-pills">
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>PostgreSQL</span>
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>SQL Server</span>
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>MySQL</span>
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>Supabase</span>
+            </div>
           </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #8fe3c5"></span>MySQL
+          <div class="stack-group glass reveal">
+            <h3><span class="stack-num">04</span> Herramientas</h3>
+            <div class="stack-pills">
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>Git</span>
+              <span class="stack-pill magnetic"><span class="pill-dot"></span>Claude Code</span>
+            </div>
           </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #8fe3c5"></span>SupeBase
-          </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #ff9b85"></span>JavaScript
-          </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #7fd8c0"></span>Spring
-            Boot
-          </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #7fd8c0"></span>Angular
-          </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #ff9b85"></span>Git
-          </div>
-          <div class="stack-pill reveal">
-            <span class="pill-dot" style="background: #ff9b85"></span>Claude
-            Code
+        </div>
+      </section>
+
+      <!-- ===== CONTACTO ===== -->
+      <section id="contacto" class="section">
+        <div class="contact-card reveal">
+          <p class="section-label">04 · Contacto</p>
+          <h2>¿Tienes un proyecto o una vacante?</h2>
+          <p>
+            Estoy disponible para oportunidades como Backend Developer. Escríbeme
+            y te respondo lo antes posible.
+          </p>
+          <div class="contact-actions">
+            <a
+              href="mailto:rivadeneyracarlos379@gmail.com"
+              class="btn btn-primary magnetic"
+              >Escríbeme un correo</a
+            >
+            <button
+              type="button"
+              class="btn btn-ghost magnetic"
+              id="copyEmail"
+              data-email="rivadeneyracarlos379@gmail.com"
+            >
+              <span class="copy-label">Copiar correo</span>
+            </button>
+            <a
+              href="https://wa.me/51938382665"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-ghost btn-wsp-text magnetic"
+              >WhatsApp</a
+            >
           </div>
         </div>
       </section>
@@ -383,156 +716,19 @@ console.log(dev.rol + " listo ✅");'
 
     <footer class="site-footer">
       <p>
-        © <span id="year"></span> Carlos Rivadeneyra — construido con HTML &amp;
-        CSS
+        © <span id="year"></span> Carlos Rivadeneyra — hecho con HTML, CSS y
+        JavaScript
       </p>
     </footer>
 
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
+    <button class="back-to-top" id="backToTop" type="button" aria-label="Volver arriba">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m5 12 7-7 7 7" /><path d="M12 19V5" />
+      </svg>
+    </button>
 
-      const navToggle = document.getElementById("navToggle");
-      const navLinks = document.getElementById("navLinks");
-      navToggle.addEventListener("click", () => {
-        const isOpen = navLinks.classList.toggle("open");
-        navToggle.classList.toggle("open");
-        navToggle.setAttribute("aria-expanded", isOpen);
-      });
-      navLinks.querySelectorAll("a").forEach((link) =>
-        link.addEventListener("click", () => {
-          navLinks.classList.remove("open");
-          navToggle.classList.remove("open");
-        }),
-      );
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-      const header = document.querySelector(".site-header");
-      const progressBar = document.getElementById("scrollProgress");
-      window.addEventListener("scroll", () => {
-        header.classList.toggle("scrolled", window.scrollY > 10);
-        const docHeight =
-          document.documentElement.scrollHeight - window.innerHeight;
-        const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
-        progressBar.style.width = progress + "%";
-      });
-
-      /* ---- Aparición al hacer scroll, con stagger por grupo ---- */
-      const groups = document.querySelectorAll(".projects-grid, .stack-grid");
-      groups.forEach((group) => {
-        group.querySelectorAll(".reveal").forEach((el, i) => {
-          el.style.transitionDelay = i * 90 + "ms";
-        });
-      });
-
-      const revealEls = document.querySelectorAll(".reveal");
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.15 },
-      );
-      revealEls.forEach((el) => observer.observe(el));
-
-      /* ---- Efecto de escritura en la terminal ---- */
-      const terminalWrap = document.getElementById("terminalBody");
-      const terminalCode = document.getElementById("terminalCode");
-      const terminalCursor = document.getElementById("terminalCursor");
-      let typed = false;
-      const fullCode = terminalWrap.dataset.code;
-
-      function typeCode() {
-        if (typed) return;
-        typed = true;
-        let i = 0;
-        const speed = 18;
-        (function step() {
-          if (i <= fullCode.length) {
-            terminalCode.textContent = fullCode.slice(0, i);
-            i++;
-            setTimeout(step, speed);
-          } else {
-            terminalCursor.classList.add("blink");
-          }
-        })();
-      }
-      const terminalObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              typeCode();
-              terminalObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.4 },
-      );
-      terminalObserver.observe(terminalWrap);
-
-      /* ---- Tilt 3D en tarjetas de proyecto ---- */
-      const tiltCards = document.querySelectorAll(".project-card");
-      tiltCards.forEach((card) => {
-        card.addEventListener("mousemove", (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const rotateX = (y / rect.height - 0.5) * -8;
-          const rotateY = (x / rect.width - 0.5) * 8;
-          card.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-        card.addEventListener("mouseleave", () => {
-          card.style.transform = "";
-        });
-      });
-
-      /* ---- Botones magnéticos ---- */
-      const magneticEls = document.querySelectorAll(".btn, .stack-pill");
-      magneticEls.forEach((el) => {
-        el.addEventListener("mousemove", (e) => {
-          const rect = el.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          el.style.transform = `translate(${x * 0.18}px, ${y * 0.35}px)`;
-        });
-        el.addEventListener("mouseleave", () => {
-          el.style.transform = "";
-        });
-      });
-
-      /* ---- Crossfade + zoom automático entre varias fotos ---- */
-      const photoSlides = document.querySelectorAll("#photoStack .photo-slide");
-      if (photoSlides.length > 1) {
-        let currentPhoto = 0;
-        setInterval(() => {
-          photoSlides[currentPhoto].classList.remove("is-active");
-          currentPhoto = (currentPhoto + 1) % photoSlides.length;
-          photoSlides[currentPhoto].classList.add("is-active");
-        }, 4500);
-      }
-
-      /* ---- Resaltar link activo del nav según sección visible ---- */
-      const sections = document.querySelectorAll("main section[id]");
-      const navAnchors = document.querySelectorAll(
-        ".nav-links a[data-section]",
-      );
-      const navObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              navAnchors.forEach((a) => a.classList.remove("active"));
-              const active = document.querySelector(
-                `.nav-links a[data-section="${entry.target.id}"]`,
-              );
-              if (active) active.classList.add("active");
-            }
-          });
-        },
-        { threshold: 0.5 },
-      );
-      sections.forEach((s) => navObserver.observe(s));
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
