@@ -36,7 +36,7 @@ themeToggle.addEventListener("click", (e) => {
   document.startViewTransition(() => applyTheme(next)).ready.then(() => {
     root.animate(
       { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-      { duration: 650, easing: "cubic-bezier(.22,1,.36,1)", pseudoElement: "::view-transition-new(root)" },
+      { duration: 400, easing: "cubic-bezier(0.23, 1, 0.32, 1)", pseudoElement: "::view-transition-new(root)" },
     );
   });
 });
@@ -133,7 +133,7 @@ document.querySelectorAll(".pv-cal").forEach((cal) => {
 /* ---- Aparición al hacer scroll, con stagger por grupo ---- */
 document.querySelectorAll(".projects-grid, .stack-grid").forEach((group) => {
   group.querySelectorAll(".reveal").forEach((el, i) => {
-    el.style.setProperty("--delay", (i % 3) * 110 + "ms");
+    el.style.setProperty("--delay", (i % 3) * 50 + "ms");
   });
 });
 
@@ -172,7 +172,7 @@ function animateCounter(el, target) {
 }
 setTimeout(
   () => Object.entries(counts).forEach(([id, n]) => animateCounter(document.getElementById(id), n)),
-  reduceMotion ? 0 : 900,
+  reduceMotion ? 0 : 450,
 );
 
 /* ---- Rol que se escribe y borra en el hero ---- */
@@ -251,49 +251,100 @@ filterButtons.forEach((btn) => {
       b.classList.toggle("is-active", active);
       b.setAttribute("aria-pressed", active);
     });
-    projectCards.forEach((card, i) => {
+    projectCards.forEach((card) => {
       const tags = card.dataset.tags.split(" ");
       const show = filter === "all" || tags.includes(filter);
       card.classList.toggle("is-hidden", !show);
       if (show) {
-        card.classList.add("is-visible");
-        card.classList.remove("pop");
-        void card.offsetWidth; // reinicia la animación
-        card.style.animationDelay = i * 40 + "ms";
-        card.classList.add("pop");
+        // Transición (no keyframes): si se pulsa otro filtro a mitad, continúa desde donde está
+        card.classList.add("is-visible", "is-filtering", "is-entering");
+        void card.offsetWidth;
+        card.classList.remove("is-entering");
       }
     });
   });
 });
 
-/* ---- Tilt 3D + luz que sigue al cursor en las tarjetas ---- */
-if (!reduceMotion && window.matchMedia("(hover: hover)").matches) {
+/* ---- Tilt 3D con inercia + luz que sigue al cursor en las tarjetas ----
+   En vez de copiar la posición del mouse al instante, en cada frame los valores
+   se acercan una fracción a su objetivo (lerp): el movimiento gana peso y se
+   detiene suave. El loop solo corre mientras hay algo moviéndose. */
+if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  const MAX_TILT = 5; // grados
+  const LIFT = -6; // px
+  const TILT_FOLLOW = 0.12; // fracción por frame a 60 Hz: más bajo = más inercia
+  const SPOT_FOLLOW = 0.3;
+
   projectCards.forEach((card) => {
+    const spot = document.createElement("span");
+    spot.className = "card-spot";
+    spot.setAttribute("aria-hidden", "true");
+    card.prepend(spot);
+
+    const cur = { rx: 0, ry: 0, lift: 0, sx: 0, sy: 0 };
+    const target = { rx: 0, ry: 0, lift: 0, sx: 0, sy: 0 };
+    let frame = null;
+    let last = 0;
+
+    function tick(now) {
+      // Corrige por el tiempo real del frame: se siente igual a 60 Hz que a 120 Hz
+      const dt = last ? Math.min(now - last, 64) : 16.7;
+      last = now;
+      const kTilt = 1 - Math.pow(1 - TILT_FOLLOW, dt / 16.7);
+      const kSpot = 1 - Math.pow(1 - SPOT_FOLLOW, dt / 16.7);
+
+      let moving = false;
+      for (const key of ["rx", "ry", "lift"]) {
+        cur[key] += (target[key] - cur[key]) * kTilt;
+        if (Math.abs(target[key] - cur[key]) > 0.01) moving = true;
+      }
+      for (const key of ["sx", "sy"]) {
+        cur[key] += (target[key] - cur[key]) * kSpot;
+        if (Math.abs(target[key] - cur[key]) > 0.5) moving = true;
+      }
+
+      // transform directo sobre cada elemento: no recalcula los estilos de toda la tarjeta
+      spot.style.transform = `translate(${cur.sx}px, ${cur.sy}px)`;
+      card.style.transform = `perspective(900px) translateY(${cur.lift}px) rotateX(${cur.rx}deg) rotateY(${cur.ry}deg)`;
+
+      if (moving) {
+        frame = requestAnimationFrame(tick);
+        return;
+      }
+      frame = null;
+      last = 0;
+      if (target.lift === 0) {
+        card.style.transform = "";
+        card.classList.remove("is-tilting");
+      }
+    }
+    const start = () => {
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+
+    card.addEventListener("pointerenter", (e) => {
+      const rect = card.getBoundingClientRect();
+      // La luz aparece bajo el cursor, sin viajar desde donde quedó la última vez
+      cur.sx = target.sx = e.clientX - rect.left;
+      cur.sy = target.sy = e.clientY - rect.top;
+      spot.style.transform = `translate(${cur.sx}px, ${cur.sy}px)`;
+      card.classList.add("is-tilting");
+    });
     card.addEventListener("pointermove", (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      card.style.setProperty("--mx", x + "px");
-      card.style.setProperty("--my", y + "px");
-      const rotateX = (y / rect.height - 0.5) * -5;
-      const rotateY = (x / rect.width - 0.5) * 5;
-      card.style.transform = `perspective(900px) translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      target.sx = x;
+      target.sy = y;
+      target.rx = (y / rect.height - 0.5) * -MAX_TILT;
+      target.ry = (x / rect.width - 0.5) * MAX_TILT;
+      target.lift = LIFT;
+      card.classList.add("is-tilting");
+      start();
     });
     card.addEventListener("pointerleave", () => {
-      card.style.transform = "";
-    });
-  });
-
-  /* ---- Botones magnéticos ---- */
-  document.querySelectorAll(".magnetic").forEach((el) => {
-    el.addEventListener("pointermove", (e) => {
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      el.style.transform = `translate(${x * 0.18}px, ${y * 0.3}px)`;
-    });
-    el.addEventListener("pointerleave", () => {
-      el.style.transform = "";
+      target.rx = target.ry = target.lift = 0;
+      start();
     });
   });
 }
