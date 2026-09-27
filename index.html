@@ -284,61 +284,69 @@ console.log(dev.rol + " listo ✅");'
           </div>
         </div>
 
+        <!--
+          Cada tarjeta muestra solo la vista previa y el nombre.
+          Lo que está dentro de .project-details (oculto) es lo que aparece
+          en el panel al hacer clic. data-slug crea el link directo: #slug
+        -->
         <div class="projects-grid" id="projectsGrid">
           <!-- BeltCore -->
-          <article class="project-card reveal" data-tags="java db">
-            <div class="project-preview pv-belt" aria-hidden="true">
-              <div class="pv-title">Órdenes en producción</div>
-              <div class="pv-bar"><span>Corte</span><i style="--w: 86%"></i></div>
-              <div class="pv-bar"><span>Ensamble</span><i style="--w: 62%"></i></div>
-              <div class="pv-bar"><span>Control</span><i style="--w: 38%"></i></div>
-            </div>
-            <div class="project-body">
-              <div class="project-head">
+          <article class="project-card reveal" data-tags="java db" data-slug="beltcore">
+            <button class="project-open" type="button" aria-haspopup="dialog">
+              <div class="project-preview pv-belt" aria-hidden="true">
+                <div class="pv-title">Órdenes en producción</div>
+                <div class="pv-bar"><span>Corte</span><i style="--w: 86%"></i></div>
+                <div class="pv-bar"><span>Ensamble</span><i style="--w: 62%"></i></div>
+                <div class="pv-bar"><span>Control</span><i style="--w: 38%"></i></div>
+              </div>
+              <div class="project-footer">
                 <span class="project-icon">
                   <svg viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" /></svg>
                 </span>
-                <h3>Sistema Integral de Gestión de Producción de Correas</h3>
+                <h3>BeltCore</h3>
+                <span class="open-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" /></svg>
+                </span>
               </div>
+            </button>
+            <div class="project-details" hidden>
+              <p class="project-kind">Sistema integral de gestión de producción de correas</p>
               <p>
-                BeltCore es un sistema integral que digitaliza el control de
-                producción de correas industriales. Centraliza el registro de
-                órdenes, el seguimiento del proceso y el stock de materia prima,
-                reduciendo tareas manuales y optimizando la toma de decisiones
-                con datos en tiempo real.
+                BeltCore digitaliza el control de producción de correas
+                industriales. Centraliza el registro de órdenes, el seguimiento
+                del proceso y el stock de materia prima, reduciendo tareas
+                manuales y optimizando la toma de decisiones con datos en tiempo
+                real.
               </p>
+              <ul class="project-features">
+                <li>Registro de órdenes de producción</li>
+                <li>Seguimiento de cada etapa del proceso</li>
+                <li>Control de stock de materia prima</li>
+                <li>Datos en tiempo real para decidir</li>
+              </ul>
               <div class="project-tags">
-                <span>Java</span><span>JavaScript</span><span>MySQL</span
-                ><span>Oracle Cloud</span>
+                <span>Java</span><span>JavaScript</span><span>MySQL</span><span>Oracle Cloud</span>
               </div>
               <div class="project-links">
-                <a
-                  class="link-demo"
-                  data-demo
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="http://159.112.132.125:8080/BeltCoreCG_war_exploded/"
-                  >Ver demo <span aria-hidden="true">↗</span></a
-                >
+                <a class="btn btn-primary" data-demo target="_blank" rel="noopener noreferrer"
+                  href="http://159.112.132.125:8080/BeltCoreCG_war_exploded/">Ver demo <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
           <!-- API Inventario -->
-          <article class="project-card reveal" data-tags="java db">
-            <div class="project-preview pv-api" aria-hidden="true">
-              <div class="pv-req">
-                <b>GET</b> /api/productos <em>200 OK</em>
-              </div>
-              <pre class="pv-json">{
+          <article class="project-card reveal" data-tags="java db" data-slug="api-inventario">
+            <button class="project-open" type="button" aria-haspopup="dialog">
+              <div class="project-preview pv-api" aria-hidden="true">
+                <div class="pv-req"><b>GET</b> /api/productos <em>200 OK</em></div>
+                <pre class="pv-json">{
   "sku": "A-102",
   "stock": 48,
   "movimiento": "ENTRADA"
 }</pre>
-              <span class="pv-lock">🔒 JWT</span>
-            </div>
-            <div class="project-body">
-              <div class="project-head">
+                <span class="pv-lock">🔒 JWT</span>
+              </div>
+              <div class="project-footer">
                 <span class="project-icon">
                   <svg viewBox="0 0 24 24">
                     <ellipse cx="12" cy="5" rx="9" ry="3" />
@@ -346,98 +354,100 @@ console.log(dev.rol + " listo ✅");'
                     <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
                   </svg>
                 </span>
-                <h3>API de Gestión de Inventario</h3>
+                <h3>API de Inventario</h3>
+                <span class="open-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" /></svg>
+                </span>
               </div>
+            </button>
+            <div class="project-details" hidden>
+              <p class="project-kind">API REST de gestión de inventario</p>
               <p>
-                API Backend que digitaliza la gestión automatizada de
+                API backend que digitaliza la gestión automatizada de
                 inventarios. Centraliza el control de stock y el seguimiento de
-                movimientos. Implementa autenticación y autorización robusta con
-                Spring Security y JWT, reduciendo tareas manuales mediante
-                endpoints seguros e integrables.
+                movimientos, con autenticación y autorización robusta mediante
+                Spring Security y JWT.
               </p>
+              <ul class="project-features">
+                <li>Control de stock por producto</li>
+                <li>Registro y seguimiento de movimientos</li>
+                <li>Autenticación y roles con Spring Security + JWT</li>
+                <li>Endpoints REST seguros e integrables</li>
+              </ul>
               <div class="project-tags">
-                <span>PostgreSQL</span><span>Java</span><span>Spring Boot</span>
+                <span>Java</span><span>Spring Boot</span><span>PostgreSQL</span>
               </div>
               <div class="project-links">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://github.com/Carlos-maker-star/ApiGestionInventario"
-                  >Ver código <span aria-hidden="true">↗</span></a
-                >
+                <a class="btn btn-ghost" target="_blank" rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/ApiGestionInventario">Ver código <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
           <!-- Billetera -->
-          <article class="project-card reveal" data-tags="angular">
-            <div class="project-preview pv-wallet" aria-hidden="true">
-              <div class="pv-balance">
-                <small>Saldo disponible</small>
-                <strong>S/ 1,250.00</strong>
+          <article class="project-card reveal" data-tags="angular" data-slug="billetera">
+            <button class="project-open" type="button" aria-haspopup="dialog">
+              <div class="project-preview pv-wallet" aria-hidden="true">
+                <div class="pv-balance">
+                  <small>Saldo disponible</small>
+                  <strong>S/ 1,250.00</strong>
+                </div>
+                <svg class="pv-spark" viewBox="0 0 200 60" preserveAspectRatio="none">
+                  <path d="M0 48 L25 40 L50 44 L75 28 L100 32 L125 18 L150 24 L175 10 L200 14" />
+                </svg>
+                <div class="pv-tx"><span class="in">+ Depósito</span><span class="out">− Retiro</span></div>
               </div>
-              <svg class="pv-spark" viewBox="0 0 200 60" preserveAspectRatio="none">
-                <path d="M0 48 L25 40 L50 44 L75 28 L100 32 L125 18 L150 24 L175 10 L200 14" />
-              </svg>
-              <div class="pv-tx">
-                <span class="in">+ Depósito</span><span class="out">− Retiro</span>
-              </div>
-            </div>
-            <div class="project-body">
-              <div class="project-head">
+              <div class="project-footer">
                 <span class="project-icon">
                   <svg viewBox="0 0 24 24">
                     <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
                     <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
                   </svg>
                 </span>
-                <h3>Billetera Digital Personal</h3>
+                <h3>Billetera Digital</h3>
+                <span class="open-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" /></svg>
+                </span>
               </div>
+            </button>
+            <div class="project-details" hidden>
+              <p class="project-kind">Billetera digital personal (SPA)</p>
               <p>
-                Aplicación SPA para la gestión de billetera digital personal.
-                Centraliza el control de saldo, depósitos y retiros con
-                validación de fondos en tiempo real e historial por usuario.
-                Implementa estado reactivo con Angular Signals y persistencia de
-                sesión, ofreciendo una experiencia fluida e interactiva.
+                Aplicación SPA para la gestión de una billetera digital
+                personal. Centraliza el control de saldo, depósitos y retiros
+                con validación de fondos en tiempo real e historial por usuario.
               </p>
+              <ul class="project-features">
+                <li>Depósitos y retiros con validación de fondos</li>
+                <li>Historial de movimientos por usuario</li>
+                <li>Estado reactivo con Angular Signals</li>
+                <li>Persistencia de sesión</li>
+              </ul>
               <div class="project-tags">
-                <span>Angular</span><span>TypeScript</span
-                ><span>Tailwind CSS</span><span>HTML5</span>
+                <span>Angular</span><span>TypeScript</span><span>Tailwind CSS</span><span>HTML5</span>
               </div>
               <div class="project-links">
-                <a
-                  class="link-demo"
-                  data-demo
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://billetera-digital-beta.vercel.app/auth"
-                  >Ver demo <span aria-hidden="true">↗</span></a
-                >
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://github.com/Carlos-maker-star/BilleteraDigital"
-                  >Ver código <span aria-hidden="true">↗</span></a
-                >
+                <a class="btn btn-primary" data-demo target="_blank" rel="noopener noreferrer"
+                  href="https://billetera-digital-beta.vercel.app/auth">Ver demo <span aria-hidden="true">↗</span></a>
+                <a class="btn btn-ghost" target="_blank" rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/BilleteraDigital">Ver código <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
           <!-- Facturación -->
-          <article class="project-card reveal" data-tags="angular java db">
-            <div class="project-preview pv-invoice" aria-hidden="true">
-              <div class="pv-paper">
-                <div class="pv-paper-head">
-                  <b>F001-000123</b><span class="pv-pdf">PDF</span>
+          <article class="project-card reveal" data-tags="angular java db" data-slug="facturacion">
+            <button class="project-open" type="button" aria-haspopup="dialog">
+              <div class="project-preview pv-invoice" aria-hidden="true">
+                <div class="pv-paper">
+                  <div class="pv-paper-head"><b>F001-000123</b><span class="pv-pdf">PDF</span></div>
+                  <i style="--w: 90%"></i>
+                  <i style="--w: 70%"></i>
+                  <i style="--w: 80%"></i>
+                  <div class="pv-total"><span>Total</span><b>S/ 354.00</b></div>
                 </div>
-                <i style="--w: 90%"></i>
-                <i style="--w: 70%"></i>
-                <i style="--w: 80%"></i>
-                <div class="pv-total"><span>Total</span><b>S/ 354.00</b></div>
               </div>
-            </div>
-            <div class="project-body">
-              <div class="project-head">
+              <div class="project-footer">
                 <span class="project-icon">
                   <svg viewBox="0 0 24 24">
                     <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
@@ -445,172 +455,212 @@ console.log(dev.rol + " listo ✅");'
                     <path d="M12 17.5v-11" />
                   </svg>
                 </span>
-                <h3>Sistema de Facturación Web</h3>
+                <h3>Facturación Web</h3>
+                <span class="open-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" /></svg>
+                </span>
               </div>
+            </button>
+            <div class="project-details" hidden>
+              <p class="project-kind">Sistema de facturación web full-stack</p>
               <p>
-                Aplicación SPA Full-Stack para la emisión, gestión y anulación
-                de comprobantes de pago. Integra administración de catálogo de
-                productos, generación y descarga de comprobantes en PDF, y
-                consumo de APIs RESTful desacopladas con backend en Spring Boot
-                y Supabase. Desplegada de forma independiente entre Vercel y
-                Render.
+                Aplicación SPA full-stack para la emisión, gestión y anulación
+                de comprobantes de pago. Consume APIs RESTful desacopladas con
+                backend en Spring Boot y Supabase, desplegada de forma
+                independiente entre Vercel y Render.
               </p>
+              <ul class="project-features">
+                <li>Emisión y anulación de comprobantes</li>
+                <li>Administración del catálogo de productos</li>
+                <li>Generación y descarga de comprobantes en PDF</li>
+                <li>Frontend y backend desplegados por separado</li>
+              </ul>
               <div class="project-tags">
-                <span>Angular</span><span>TypeScript</span
-                ><span>Spring Boot</span><span>Supabase</span>
+                <span>Angular</span><span>TypeScript</span><span>Spring Boot</span><span>Supabase</span>
               </div>
               <p class="project-access">
                 <span>Acceso demo:</span> <code>admin</code> / <code>123456</code>
-                <small>La primera carga puede tardar unos segundos mientras el
-                  servidor se activa.</small>
+                <small>La primera carga puede tardar unos segundos mientras el servidor se activa.</small>
               </p>
               <div class="project-links">
-                <a
-                  class="link-demo"
-                  data-demo
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://app-facturacion-uq12.vercel.app/login"
-                  >Ver demo <span aria-hidden="true">↗</span></a
-                >
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://github.com/Carlos-maker-star/AppFacturacion"
-                  >Ver código <span aria-hidden="true">↗</span></a
-                >
+                <a class="btn btn-primary" data-demo target="_blank" rel="noopener noreferrer"
+                  href="https://app-facturacion-uq12.vercel.app/login">Ver demo <span aria-hidden="true">↗</span></a>
+                <a class="btn btn-ghost" target="_blank" rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/AppFacturacion">Ver código <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
           <!-- Tickets -->
-          <article class="project-card reveal" data-tags="angular java db">
-            <div class="project-preview pv-tickets" aria-hidden="true">
-              <div class="pv-ticket">
-                <span>#142 · Impresora sin red</span><em class="st-open">Abierto</em>
+          <article class="project-card reveal" data-tags="angular java db" data-slug="tickets">
+            <button class="project-open" type="button" aria-haspopup="dialog">
+              <div class="project-preview pv-tickets" aria-hidden="true">
+                <div class="pv-ticket"><span>#142 · Impresora sin red</span><em class="st-open">Abierto</em></div>
+                <div class="pv-ticket"><span>#139 · Acceso a VPN</span><em class="st-progress">En progreso</em></div>
+                <div class="pv-ticket"><span>#131 · Correo bloqueado</span><em class="st-done">Resuelto</em></div>
               </div>
-              <div class="pv-ticket">
-                <span>#139 · Acceso a VPN</span><em class="st-progress">En progreso</em>
-              </div>
-              <div class="pv-ticket">
-                <span>#131 · Correo bloqueado</span><em class="st-done">Resuelto</em>
-              </div>
-            </div>
-            <div class="project-body">
-              <div class="project-head">
+              <div class="project-footer">
                 <span class="project-icon">
                   <svg viewBox="0 0 24 24">
                     <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
                     <path d="M13 5v2M13 17v2M13 11v2" />
                   </svg>
                 </span>
-                <h3>Sistema de Tickets de Incidencia</h3>
+                <h3>Tickets de Incidencia</h3>
+                <span class="open-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" /></svg>
+                </span>
               </div>
+            </button>
+            <div class="project-details" hidden>
+              <p class="project-kind">Mesa de ayuda con roles y estados</p>
               <p>
                 Aplicación web de mesa de ayuda donde los usuarios reportan
-                incidencias y los técnicos las gestionan según su rol y estado,
-                incluyendo comentarios, notas internas, historial de cambios y
-                dashboard de métricas. Desplegado en Render y Vercel.
+                incidencias y los técnicos las gestionan según su rol y estado.
+                Desplegada en Render y Vercel.
               </p>
+              <ul class="project-features">
+                <li>Reporte y gestión de incidencias por rol</li>
+                <li>Flujo de estados: abierto, en progreso, resuelto</li>
+                <li>Comentarios, notas internas e historial de cambios</li>
+                <li>Dashboard de métricas</li>
+              </ul>
               <div class="project-tags">
-                <span>Angular</span><span>TypeScript</span
-                ><span>Spring Boot</span><span>Supabase</span>
+                <span>Angular</span><span>TypeScript</span><span>Spring Boot</span><span>Supabase</span>
               </div>
               <p class="project-access">
-                <span>Acceso demo:</span> <code>demo@ticket.com</code> /
-                <code>demo2026</code>
-                <small>La primera carga puede tardar unos segundos mientras el
-                  servidor se activa.</small>
+                <span>Acceso demo:</span> <code>demo@ticket.com</code> / <code>demo2026</code>
+                <small>La primera carga puede tardar unos segundos mientras el servidor se activa.</small>
               </p>
               <div class="project-links">
-                <a
-                  class="link-demo"
-                  data-demo
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://app-tickets-zeta.vercel.app/"
-                  >Ver demo <span aria-hidden="true">↗</span></a
-                >
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://github.com/Carlos-maker-star/app-tickets"
-                  >Ver código <span aria-hidden="true">↗</span></a
-                >
+                <a class="btn btn-primary" data-demo target="_blank" rel="noopener noreferrer"
+                  href="https://app-tickets-zeta.vercel.app/">Ver demo <span aria-hidden="true">↗</span></a>
+                <a class="btn btn-ghost" target="_blank" rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/app-tickets">Ver código <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
           <!-- HotelDesk -->
-          <article class="project-card reveal" data-tags="angular">
-            <div class="project-preview pv-hotel" aria-hidden="true">
-              <div class="pv-kpi">
-                <div class="pv-ring" style="--target: 78">
-                  <span>78%</span>
+          <article class="project-card reveal" data-tags="angular" data-slug="hoteldesk">
+            <button class="project-open" type="button" aria-haspopup="dialog">
+              <div class="project-preview pv-hotel" aria-hidden="true">
+                <div class="pv-kpi">
+                  <div class="pv-ring" style="--target: 78"><span>78%</span></div>
+                  <small>Ocupación hoy</small>
                 </div>
-                <small>Ocupación hoy</small>
+                <!-- l = libre, r = reservada, o = ocupada -->
+                <div class="pv-cal" data-rooms="101,102,201,202"
+                  data-pattern="ooollrr|llrrroo|oooooll|llloorr"></div>
               </div>
-              <!-- l = libre, r = reservada, o = ocupada -->
-              <div
-                class="pv-cal"
-                data-rooms="101,102,201,202"
-                data-pattern="ooollrr|llrrroo|oooooll|llloorr"
-              ></div>
-            </div>
-            <div class="project-body">
-              <div class="project-head">
+              <div class="project-footer">
                 <span class="project-icon">
                   <svg viewBox="0 0 24 24">
-                    <path d="M2 4v16" />
-                    <path d="M2 8h18a2 2 0 0 1 2 2v10" />
-                    <path d="M2 17h20" />
-                    <path d="M6 8v9" />
+                    <path d="M2 4v16" /><path d="M2 8h18a2 2 0 0 1 2 2v10" />
+                    <path d="M2 17h20" /><path d="M6 8v9" />
                   </svg>
                 </span>
-                <h3>HotelDesk · Sistema de Reservas de Hotel</h3>
+                <h3>HotelDesk</h3>
+                <span class="open-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" /></svg>
+                </span>
               </div>
+            </button>
+            <div class="project-details" hidden>
+              <p class="project-kind">Sistema de reservas de hotel</p>
               <p>
-                Sistema web para gestionar las reservas de un hotel. Permite
-                registrar reservas, confirmarlas, hacer check-in y check-out,
-                cobrar pagos y ver qué habitaciones están libres en un
-                calendario. Incluye un panel con la ocupación y los ingresos del
-                día. Funciona por completo en el navegador y guarda los datos en
+                Sistema web para gestionar las reservas de un hotel. Funciona
+                por completo en el navegador y guarda los datos en
                 localStorage.
               </p>
+              <ul class="project-features">
+                <li>Registro y confirmación de reservas</li>
+                <li>Check-in, check-out y cobro de pagos</li>
+                <li>Calendario de habitaciones libres</li>
+                <li>Panel con la ocupación y los ingresos del día</li>
+              </ul>
               <div class="project-tags">
-                <span>Angular</span><span>TypeScript</span
-                ><span>Angular Material</span><span>Tailwind CSS</span>
+                <span>Angular</span><span>TypeScript</span><span>Angular Material</span><span>Tailwind CSS</span>
               </div>
               <p class="project-access">
-                <span>Acceso demo:</span> <code>admin</code> /
-                <code>admin123</code>
+                <span>Acceso demo:</span> <code>admin</code> / <code>admin123</code>
               </p>
               <div class="project-links">
-                <a
-                  class="link-demo"
-                  data-demo
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://app-reservas-inky.vercel.app"
-                  >Ver demo <span aria-hidden="true">↗</span></a
-                >
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://github.com/Carlos-maker-star/app-reservas"
-                  >Ver código <span aria-hidden="true">↗</span></a
-                >
+                <a class="btn btn-primary" data-demo target="_blank" rel="noopener noreferrer"
+                  href="https://app-reservas-inky.vercel.app">Ver demo <span aria-hidden="true">↗</span></a>
+                <a class="btn btn-ghost" target="_blank" rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/app-reservas">Ver código <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
-          <!-- Próximamente -->
-          <article class="project-card reveal is-upcoming" data-tags="all">
-            <div class="project-preview pv-soon" aria-hidden="true">
-              <span class="pv-soon-code">nuevo_proyecto()<i>▍</i></span>
+          <!-- MisFinanzas -->
+          <article class="project-card reveal" data-tags="angular db" data-slug="misfinanzas">
+            <button class="project-open" type="button" aria-haspopup="dialog">
+              <div class="project-preview pv-finance" aria-hidden="true">
+                <div class="pv-title">Resumen del mes</div>
+                <div class="pv-kpis">
+                  <div><small>Ingresos</small><b class="up">S/ 3,200</b></div>
+                  <div><small>Gastos</small><b class="down">S/ 2,150</b></div>
+                  <div><small>Ahorro</small><b>S/ 1,050</b></div>
+                </div>
+                <div class="pv-split">
+                  <i style="--w: 38%"></i><i style="--w: 24%"></i><i style="--w: 22%"></i><i style="--w: 16%"></i>
+                </div>
+                <div class="pv-legend">
+                  <span>Comida</span><span>Transporte</span><span>Servicios</span><span>Otros</span>
+                </div>
+              </div>
+              <div class="project-footer">
+                <span class="project-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                    <path d="M22 12A10 10 0 0 0 12 2v10z" />
+                  </svg>
+                </span>
+                <h3>MisFinanzas</h3>
+                <span class="open-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" /></svg>
+                </span>
+              </div>
+            </button>
+            <div class="project-details" hidden>
+              <p class="project-kind">Control de finanzas personales</p>
+              <p>
+                Aplicación web para controlar tus finanzas personales. Varias
+                personas pueden usarla y cada una ve solo sus propios datos.
+                Calcula el saldo de cada cuenta y muestra un resumen del mes con
+                lo que ganaste, gastaste y ahorraste, y en qué categorías se fue
+                tu dinero.
+              </p>
+              <ul class="project-features">
+                <li>Multiusuario: cada persona ve solo sus datos</li>
+                <li>Cuentas de efectivo, bancos, tarjetas y Yape</li>
+                <li>Registro de ingresos, gastos y transferencias</li>
+                <li>Saldo por cuenta y resumen mensual por categorías</li>
+              </ul>
+              <div class="project-tags">
+                <span>Angular</span><span>TypeScript</span><span>Supabase</span><span>PostgreSQL</span><span>Tailwind CSS</span>
+              </div>
+              <p class="project-access">
+                <span>Acceso demo:</span> crea tu cuenta gratis desde la app.
+              </p>
+              <div class="project-links">
+                <a class="btn btn-primary" data-demo target="_blank" rel="noopener noreferrer"
+                  href="https://app-finanzas-rosy.vercel.app">Ver demo <span aria-hidden="true">↗</span></a>
+                <a class="btn btn-ghost" target="_blank" rel="noopener noreferrer"
+                  href="https://github.com/Carlos-maker-star/app-finanzas">Ver código <span aria-hidden="true">↗</span></a>
+              </div>
             </div>
-            <div class="project-body">
-              <div class="project-head">
+          </article>
+
+          <!-- Próximamente (no se abre) -->
+          <article class="project-card reveal is-upcoming" data-tags="all">
+            <div class="project-open is-static">
+              <div class="project-preview pv-soon" aria-hidden="true">
+                <span class="pv-soon-code">nuevo_proyecto()<i>▍</i></span>
+              </div>
+              <div class="project-footer">
                 <span class="project-icon">
                   <svg viewBox="0 0 24 24">
                     <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
@@ -619,24 +669,42 @@ console.log(dev.rol + " listo ✅");'
                     <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
                   </svg>
                 </span>
-                <h3>Nuevas Soluciones Tecnológicas</h3>
-              </div>
-              <p>
-                Actualmente diseñando y desarrollando proyectos backend y web
-                enfocados en arquitecturas escalables, automatización de
-                procesos y optimización de software. ¡Nuevos repositorios y
-                demos en vivo próximamente!
-              </p>
-              <div class="project-tags">
-                <span>En desarrollo</span><span>Innovación</span>
-              </div>
-              <div class="project-links">
-                <span class="upcoming-status">⚡ Próximamente</span>
+                <h3>Próximamente</h3>
+                <span class="upcoming-status">En desarrollo</span>
               </div>
             </div>
           </article>
         </div>
       </section>
+
+      <!-- Panel de detalle de proyecto -->
+      <dialog class="project-dialog" id="projectDialog" aria-labelledby="dialogTitle">
+        <div class="dialog-top">
+          <div class="dialog-nav">
+            <button type="button" class="dialog-btn" id="dialogPrev" aria-label="Proyecto anterior">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+            </button>
+            <span class="dialog-count" id="dialogCount"></span>
+            <button type="button" class="dialog-btn" id="dialogNext" aria-label="Proyecto siguiente">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+            </button>
+          </div>
+          <button type="button" class="dialog-btn" id="dialogClose" aria-label="Cerrar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
+        </div>
+        <div class="dialog-preview" id="dialogPreview"></div>
+        <div class="dialog-body">
+          <div class="dialog-head">
+            <span class="project-icon" id="dialogIcon"></span>
+            <div>
+              <h3 id="dialogTitle"></h3>
+              <p class="dialog-kind" id="dialogKind"></p>
+            </div>
+          </div>
+          <div class="dialog-content" id="dialogContent"></div>
+        </div>
+      </dialog>
 
       <!-- ===== STACK / HABILIDADES ===== -->
       <section id="stack" class="section">

@@ -265,6 +265,107 @@ filterButtons.forEach((btn) => {
   });
 });
 
+/* ---- Panel de detalle de proyectos ----
+   Cada tarjeta guarda su detalle en .project-details (oculto); al abrirla se
+   copia al <dialog>. data-slug da un link directo: portafolio/#hoteldesk */
+const dialog = document.getElementById("projectDialog");
+const dialogPreview = document.getElementById("dialogPreview");
+const dialogIcon = document.getElementById("dialogIcon");
+const dialogTitle = document.getElementById("dialogTitle");
+const dialogKind = document.getElementById("dialogKind");
+const dialogContent = document.getElementById("dialogContent");
+const dialogCount = document.getElementById("dialogCount");
+const openableCards = [...document.querySelectorAll(".project-card[data-slug]")];
+let currentIndex = -1;
+
+// Se navega solo entre los proyectos que deja ver el filtro activo
+const visibleProjects = () => openableCards.filter((c) => !c.classList.contains("is-hidden"));
+
+function sectionHeading(text) {
+  const h = document.createElement("h4");
+  h.textContent = text;
+  return h;
+}
+
+function renderProject(card, animatePreview) {
+  const list = visibleProjects();
+  currentIndex = list.indexOf(card);
+  dialogCount.textContent = `${currentIndex + 1} / ${list.length}`;
+  dialogTitle.textContent = card.querySelector(".project-footer h3").textContent;
+  dialogIcon.innerHTML = card.querySelector(".project-footer .project-icon").innerHTML;
+
+  const details = card.querySelector(".project-details").cloneNode(true);
+  const kind = details.querySelector(".project-kind");
+  dialogKind.textContent = kind.textContent;
+  kind.remove();
+  details.querySelector(".project-features")?.before(sectionHeading("Lo que hace"));
+  details.querySelector(".project-tags")?.before(sectionHeading("Stack"));
+  dialogContent.replaceChildren(...details.childNodes);
+
+  // La vista previa se anima solo al abrir; al pasar de proyecto el cambio es
+  // instantáneo, porque se hace muchas veces seguidas (y también con el teclado).
+  dialogPreview.classList.toggle("is-visible", !animatePreview);
+  dialogPreview.replaceChildren(card.querySelector(".project-preview").cloneNode(true));
+  if (animatePreview) setTimeout(() => dialogPreview.classList.add("is-visible"), 60);
+
+  history.replaceState(null, "", "#" + card.dataset.slug);
+}
+
+let dialogCleanedUp = true;
+
+function openProject(card) {
+  renderProject(card, !reduceMotion);
+  if (!dialog.open) dialog.showModal();
+  dialogCleanedUp = false;
+}
+
+// Se llama al cerrar con el botón o el fondo, y también desde el evento
+// "close" (Escape). La bandera evita ejecutarlo dos veces.
+function onDialogClosed() {
+  if (dialogCleanedUp) return;
+  dialogCleanedUp = true;
+  history.replaceState(null, "", location.pathname + location.search);
+  // Devuelve el foco a la tarjeta del proyecto que se estaba viendo
+  visibleProjects()[currentIndex]?.querySelector(".project-open").focus();
+}
+
+function closeProject() {
+  dialog.close();
+  onDialogClosed();
+}
+
+function stepProject(dir) {
+  const list = visibleProjects();
+  renderProject(list[(currentIndex + dir + list.length) % list.length], false);
+  dialog.scrollTop = 0;
+}
+
+openableCards.forEach((card) => {
+  card.querySelector(".project-open").addEventListener("click", () => openProject(card));
+});
+document.getElementById("dialogPrev").addEventListener("click", () => stepProject(-1));
+document.getElementById("dialogNext").addEventListener("click", () => stepProject(1));
+document.getElementById("dialogClose").addEventListener("click", closeProject);
+
+// Clic fuera del panel (en el fondo oscuro) lo cierra
+dialog.addEventListener("click", (e) => {
+  const r = dialog.getBoundingClientRect();
+  const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+  if (!inside) closeProject();
+});
+dialog.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") stepProject(-1);
+  if (e.key === "ArrowRight") stepProject(1);
+});
+dialog.addEventListener("close", onDialogClosed);
+
+// Link directo: si la URL trae #slug de un proyecto, se abre al cargar
+const linkedCard = openableCards.find((c) => c.dataset.slug === location.hash.slice(1));
+if (linkedCard) {
+  document.getElementById("proyectos").scrollIntoView();
+  openProject(linkedCard);
+}
+
 /* ---- Tilt 3D con inercia + luz que sigue al cursor en las tarjetas ----
    En vez de copiar la posición del mouse al instante, en cada frame los valores
    se acercan una fracción a su objetivo (lerp): el movimiento gana peso y se

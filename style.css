@@ -798,8 +798,52 @@ main { position: relative; z-index: 1; }
     box-shadow 200ms ease;
 }
 
-.project-body { display: flex; flex-direction: column; flex: 1; padding: 20px 24px 24px; }
-.project-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+/* La tarjeta completa es un botón que abre el panel de detalle */
+.project-open {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms var(--ease);
+}
+.project-open:active { transform: scale(0.98); }
+.project-open:focus-visible { outline-offset: -3px; }
+.project-open.is-static { cursor: default; }
+.project-open.is-static:active { transform: none; }
+
+.project-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 16px;
+}
+.project-footer h3 { flex: 1; font-size: 1.05rem; }
+.open-hint {
+  flex: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  color: var(--text-muted);
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+.open-hint svg {
+  width: 16px; height: 16px;
+  fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 200ms var(--ease);
+}
+.project-card:hover .open-hint { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
 .project-icon {
   flex: none;
   width: 38px; height: 38px;
@@ -815,13 +859,11 @@ main { position: relative; z-index: 1; }
   fill: none; stroke: currentColor; stroke-width: 2;
   stroke-linecap: round; stroke-linejoin: round;
 }
-.project-card h3 { font-size: 1.1rem; padding-top: 7px; }
-.project-card p { font-size: .9rem; }
 
-.project-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .project-tags span {
   font-family: var(--font-mono);
-  font-size: .68rem;
+  font-size: .72rem;
   background: color-mix(in srgb, var(--text) 6%, transparent);
   border: 1px solid var(--line);
   padding: 4px 10px;
@@ -830,47 +872,36 @@ main { position: relative; z-index: 1; }
 }
 
 .project-access {
-  font-size: .8rem !important;
-  padding: 10px 12px;
+  font-size: .85rem;
+  padding: 10px 14px;
   border-radius: 12px;
   border: 1px dashed var(--line-strong);
+  margin: 18px 0 0;
 }
 .project-access span { color: var(--text); font-weight: 500; }
 .project-access code {
   font-family: var(--font-mono);
-  font-size: .78rem;
+  font-size: .8rem;
   color: var(--accent);
 }
-.project-access small { display: block; margin-top: 4px; font-size: .74rem; }
+.project-access small { display: block; margin-top: 4px; font-size: .78rem; }
 
-.project-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding-top: 6px; }
-.project-links a {
-  font-family: var(--font-mono);
-  font-size: .8rem;
-  padding: 8px 14px;
-  border-radius: 100px;
-  border: 1px solid var(--line-strong);
-  color: var(--text);
-  transition: transform 160ms var(--ease), border-color 200ms ease, color 200ms ease, background-color 200ms ease;
-}
+.project-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .project-links a span { display: inline-block; transition: transform 200ms var(--ease); }
-.project-links a:hover { border-color: var(--accent); color: var(--accent); }
-.project-links a.link-demo { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
-.project-links a.link-demo:hover { background: var(--accent); color: var(--on-accent); }
-.upcoming-status { font-family: var(--font-mono); font-size: .82rem; color: var(--accent-2); }
+.upcoming-status { font-family: var(--font-mono); font-size: .75rem; color: var(--accent-2); }
 
 /* ---------- Vistas previas de cada proyecto ---------- */
 .project-preview {
-  height: 150px;
+  height: 190px;
   margin: 10px 10px 0;
   border-radius: 16px;
   background: var(--bg-soft);
   border: 1px solid var(--line);
   position: relative;
   overflow: hidden;
-  padding: 16px 18px;
+  padding: 18px 20px;
   font-family: var(--font-mono);
-  font-size: .7rem;
+  font-size: .72rem;
   color: var(--text-muted);
   transition: transform 200ms var(--ease);
 }
@@ -886,6 +917,7 @@ main { position: relative; z-index: 1; }
 @media (hover: hover) and (pointer: fine) {
   .project-card:hover .project-icon { transform: rotate(-6deg) scale(1.06); }
   .project-card:hover .project-preview { transform: scale(1.02); }
+  .project-card:hover .open-hint svg { transform: translate(1px, -1px); }
   .project-links a:hover span { transform: translate(2px, -2px); }
 }
 .pv-title { color: var(--text); font-weight: 600; margin-bottom: 12px; }
@@ -1017,6 +1049,45 @@ main { position: relative; z-index: 1; }
 .pv-cal-row i.o { background: var(--accent); }
 .is-visible .pv-cal-row i { opacity: 1; transform: scale(1); }
 
+/* MisFinanzas: resumen del mes + gasto por categoría */
+.pv-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.pv-kpis div {
+  padding: 7px 9px;
+  border-radius: 9px;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+}
+.pv-kpis div:nth-child(2) { transition-delay: 60ms; }
+.pv-kpis div:nth-child(3) { transition-delay: 120ms; }
+.is-visible .pv-kpis div { opacity: 1; transform: none; }
+.pv-kpis small { display: block; font-size: .6rem; }
+.pv-kpis b { font-family: var(--font-display); font-size: .82rem; color: var(--text); white-space: nowrap; }
+.pv-kpis b.up { color: var(--ok); }
+.pv-kpis b.down { color: var(--busy); }
+.pv-split {
+  display: flex;
+  gap: 3px;
+  height: 10px;
+  margin-top: 14px;
+  border-radius: 6px;
+  overflow: hidden;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s var(--ease) .2s;
+}
+.is-visible .pv-split { transform: scaleX(1); }
+.pv-split i { flex: 0 0 var(--w); }
+.pv-split i:nth-child(1), .pv-legend span:nth-child(1)::before { background: var(--accent); }
+.pv-split i:nth-child(2), .pv-legend span:nth-child(2)::before { background: var(--accent-2); }
+.pv-split i:nth-child(3), .pv-legend span:nth-child(3)::before { background: var(--info); }
+.pv-split i:nth-child(4), .pv-legend span:nth-child(4)::before { background: var(--warn); }
+.pv-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 9px; font-size: .62rem; }
+.pv-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.pv-legend span::before { content: ''; width: 7px; height: 7px; border-radius: 2px; }
+
 /* Próximamente */
 .pv-soon {
   display: grid; place-items: center;
@@ -1027,6 +1098,127 @@ main { position: relative; z-index: 1; }
 }
 .pv-soon-code { font-size: .9rem; color: var(--accent); }
 .pv-soon-code i { font-style: normal; color: var(--accent-2); animation: blink 1s step-end infinite; }
+
+/* =========================================================
+   PANEL DE DETALLE DE PROYECTO
+   ========================================================= */
+html:has(.project-dialog[open]) { overflow: hidden; }
+
+/* Modal centrado: entra en 250ms y sale más rápido (150ms).
+   Los navegadores sin @starting-style simplemente lo muestran sin animar. */
+.project-dialog {
+  width: min(720px, calc(100% - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface-solid);
+  color: var(--text);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .5);
+  overflow: auto;
+  overscroll-behavior: contain;
+  opacity: 0;
+  transform: scale(0.96) translateY(8px);
+  transition:
+    opacity 150ms var(--ease),
+    transform 150ms var(--ease),
+    overlay 150ms allow-discrete,
+    display 150ms allow-discrete;
+}
+.project-dialog[open] { opacity: 1; transform: none; transition-duration: 250ms; }
+@starting-style {
+  .project-dialog[open] { opacity: 0; transform: scale(0.96) translateY(8px); }
+}
+.project-dialog::backdrop {
+  background: rgba(8, 12, 11, .55);
+  opacity: 0;
+  transition: opacity 150ms var(--ease), overlay 150ms allow-discrete, display 150ms allow-discrete;
+}
+.project-dialog[open]::backdrop { opacity: 1; transition-duration: 250ms; }
+@starting-style {
+  .project-dialog[open]::backdrop { opacity: 0; }
+}
+
+.dialog-top {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px 10px;
+  background: var(--surface-solid);
+}
+.dialog-nav { display: flex; align-items: center; gap: 6px; }
+.dialog-count { font-family: var(--font-mono); font-size: .75rem; color: var(--text-muted); min-width: 42px; text-align: center; }
+.dialog-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 160ms var(--ease), background-color 200ms ease, border-color 200ms ease;
+}
+.dialog-btn svg {
+  width: 18px; height: 18px;
+  fill: none; stroke: var(--text); stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.dialog-btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+.dialog-btn:active { transform: scale(0.95); }
+
+.dialog-preview { padding: 0 12px; }
+.dialog-preview .project-preview { height: 230px; margin: 0; font-size: .78rem; }
+
+.dialog-body { padding: 20px 24px 26px; }
+.dialog-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.dialog-head h3 { font-size: 1.45rem; letter-spacing: -0.01em; }
+.dialog-kind { margin: 2px 0 0; font-size: .88rem; }
+.dialog-content > p { font-size: .95rem; }
+.dialog-content h4 {
+  margin: 20px 0 10px;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.project-features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px; }
+.project-features li { position: relative; padding-left: 22px; font-size: .9rem; color: var(--text); }
+.project-features li::before {
+  content: '';
+  position: absolute;
+  left: 2px; top: .45em;
+  width: 10px; height: 6px;
+  border-left: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(-45deg);
+}
+
+/* En celular el panel es una hoja que sube desde abajo */
+@media (max-width: 600px) {
+  .project-dialog {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92dvh;
+    margin: auto 0 0;
+    border-radius: 24px 24px 0 0;
+    border-bottom: 0;
+    transform: translateY(100%);
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .project-dialog[open] { transform: none; transition-duration: 300ms; }
+  @starting-style {
+    .project-dialog[open] { transform: translateY(100%); }
+  }
+  .dialog-preview .project-preview { height: 180px; }
+  .dialog-body { padding: 18px 18px 28px; }
+  .project-features { grid-template-columns: 1fr; }
+  .project-links .btn { flex: 1; }
+}
 
 /* =========================================================
    STACK
@@ -1197,6 +1389,7 @@ a:focus-visible, button:focus-visible {
   .intro { animation-name: fadeIn; }
   .reveal { translate: none; }
   .project-card.is-entering { transform: none; }
+  .project-dialog, .project-dialog[open] { transform: none; }
   .cursor-glow { display: none; }
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
