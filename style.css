@@ -1088,6 +1088,46 @@ main { position: relative; z-index: 1; }
 .pv-legend span { display: inline-flex; align-items: center; gap: 5px; }
 .pv-legend span::before { content: ''; width: 7px; height: 7px; border-radius: 2px; }
 
+/* Landing importadora: filtros + catálogo + botón de WhatsApp */
+.pv-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.pv-chips span {
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--line-strong);
+  font-size: .64rem;
+}
+.pv-chips span.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.pv-products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.pv-products div {
+  padding: 6px;
+  border-radius: 9px;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+}
+.pv-products div:nth-child(2) { transition-delay: 60ms; }
+.pv-products div:nth-child(3) { transition-delay: 120ms; }
+.is-visible .pv-products div { opacity: 1; transform: none; }
+.pv-products i {
+  display: block;
+  height: 44px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 35%, transparent), color-mix(in srgb, var(--accent-2) 35%, transparent));
+}
+.pv-products small { font-size: .6rem; }
+.pv-quote {
+  position: absolute; right: 16px; bottom: 14px; z-index: 1;
+  padding: 4px 11px;
+  border-radius: 100px;
+  background: #25D366;
+  color: #fff;
+  font-size: .64rem;
+  font-weight: 600;
+}
+
 /* Próximamente */
 .pv-soon {
   display: grid; place-items: center;
