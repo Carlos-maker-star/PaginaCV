@@ -1128,6 +1128,26 @@ main { position: relative; z-index: 1; }
   font-weight: 600;
 }
 
+/* Vitrina: tres diseños de landing en miniatura */
+.pv-sites { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.pv-sites div {
+  height: 78px;
+  padding: 7px;
+  border-radius: 9px;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+}
+.pv-sites div:nth-child(2) { transition-delay: 60ms; }
+.pv-sites div:nth-child(3) { transition-delay: 120ms; }
+.is-visible .pv-sites div { opacity: 1; transform: none; }
+.pv-sites b { display: block; height: 30px; border-radius: 5px; margin-bottom: 6px; background: var(--c); opacity: .8; }
+.pv-sites i { display: block; height: 5px; border-radius: 3px; margin-bottom: 4px; background: color-mix(in srgb, var(--text) 12%, transparent); }
+.pv-sites i + i { width: 60%; }
+.pv-saas .pv-quote { background: var(--accent); color: var(--on-accent); }
+
 /* Próximamente */
 .pv-soon {
   display: grid; place-items: center;
