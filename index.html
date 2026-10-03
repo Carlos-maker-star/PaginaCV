@@ -25,6 +25,26 @@
       })();
     </script>
 
+    <!-- Intro cinemática: una vez por sesión, nunca con movimiento reducido ni
+         con link directo a un proyecto. Se fuerza con ?intro para verla de nuevo. -->
+    <script>
+      (function () {
+        try {
+          var forced = /[?&]intro/.test(location.search);
+          var seen = sessionStorage.getItem("boot-seen");
+          var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          var deep = location.hash.length > 1;
+          if (forced || (!seen && !reduce && !deep)) {
+            document.documentElement.classList.add("booting");
+            // Red de seguridad: si algo falla, la página nunca queda tapada
+            setTimeout(function () {
+              document.documentElement.classList.remove("booting");
+            }, 8000);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -34,8 +54,34 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- ===== INTRO ===== -->
+    <div class="boot" id="boot" role="dialog" aria-label="Animación de bienvenida">
+      <div class="boot-panel">
+        <div class="boot-log" id="bootLog" aria-hidden="true"></div>
+        <div class="boot-count" id="bootCount" aria-hidden="true">
+          <span id="bootNum">000</span><span class="pct">%</span>
+        </div>
+        <div class="boot-name" id="bootName" aria-hidden="true">
+          <span class="bn-line" data-t="Carlos"></span>
+          <span class="bn-line" data-t="Rivadeneyra"></span>
+          <p class="boot-role">Backend Developer</p>
+        </div>
+        <div class="boot-bar" aria-hidden="true"><i id="bootBar"></i></div>
+      </div>
+      <button class="boot-skip" id="bootSkip" type="button">Saltar <kbd>Esc</kbd></button>
+    </div>
+
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
     <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+    <nav class="rail" id="rail" aria-label="Progreso por secciones">
+      <svg class="rail-track" viewBox="0 0 24 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M12 0 C15 15 9 30 12 50 S15 85 12 100" />
+      </svg>
+      <svg class="rail-fill" id="railFill" viewBox="0 0 24 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M12 0 C15 15 9 30 12 50 S15 85 12 100" />
+      </svg>
+    </nav>
+
     <div class="bg-blob blob-1" aria-hidden="true"></div>
     <div class="bg-blob blob-2" aria-hidden="true"></div>
 
@@ -91,6 +137,7 @@
     <main>
       <!-- ===== HERO ===== -->
       <section id="inicio" class="hero">
+        <div class="net" id="net" aria-hidden="true"><canvas id="netCanvas"></canvas></div>
         <div class="hero-photo intro" style="--d: 0s">
           <div class="photo-ring">
             <!-- Agrega tantas fotos como quieras: se irán alternando solas -->
@@ -263,7 +310,7 @@ console.log(dev.rol + " listo ✅");'
       <section id="proyectos" class="section">
         <p class="section-label reveal">02 · Proyectos</p>
         <div class="section-head">
-          <h2 class="section-title reveal">Sistemas que he construido</h2>
+          <h2 class="section-title split-title">Sistemas que he construido</h2>
           <div
             class="filters reveal"
             role="group"
@@ -812,8 +859,20 @@ console.log(dev.rol + " listo ✅");'
       <!-- ===== STACK / HABILIDADES ===== -->
       <section id="stack" class="section">
         <p class="section-label reveal">03 · Stack</p>
-        <h2 class="section-title reveal">Con qué construyo</h2>
+        <h2 class="section-title split-title">Con qué construyo</h2>
 
+        <div class="stack-layout">
+          <div class="cube-wrap reveal" id="cubeWrap" aria-hidden="true">
+            <div class="cube" id="techCube">
+              <div class="face f-front" style="--c: var(--accent)">Java</div>
+              <div class="face f-back" style="--c: var(--accent-2)">Angular</div>
+              <div class="face f-right" style="--c: var(--accent)">Spring Boot</div>
+              <div class="face f-left" style="--c: var(--info)">PostgreSQL</div>
+              <div class="face f-top" style="--c: var(--accent-2)">Supabase</div>
+              <div class="face f-bottom" style="--c: var(--warn)">Git</div>
+            </div>
+            <p class="cube-hint">Arrástrame</p>
+          </div>
         <div class="stack-grid">
           <div class="stack-group glass reveal">
             <h3><span class="stack-num">01</span> Backend</h3>
@@ -845,6 +904,7 @@ console.log(dev.rol + " listo ✅");'
               <span class="stack-pill"><span class="pill-dot"></span>Claude Code</span>
             </div>
           </div>
+        </div>
         </div>
       </section>
 
@@ -899,5 +959,6 @@ console.log(dev.rol + " listo ✅");'
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="script.js"></script>
+    <script src="network.js"></script>
   </body>
 </html>

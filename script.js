@@ -3,6 +3,111 @@ const root = document.documentElement;
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
+/* ---- Intro: arranque de servidor + contador gigante ----
+   El script de <head> decide si se muestra (una vez por sesión). `bootReady`
+   avisa al resto de la página cuándo terminó, para arrancar contadores y
+   el texto que se escribe solo. */
+const bootEl = document.getElementById("boot");
+let bootResolve;
+const bootReady = new Promise((r) => (bootResolve = r));
+
+function endBoot() {
+  root.classList.remove("booting");
+  bootEl?.remove();
+  try { sessionStorage.setItem("boot-seen", "1"); } catch (e) {}
+  bootResolve();
+}
+
+if (bootEl && root.classList.contains("booting")) {
+  const logEl = document.getElementById("bootLog");
+  const numEl = document.getElementById("bootNum");
+  const barEl = document.getElementById("bootBar");
+  const skipBtn = document.getElementById("bootSkip");
+  let finished = false;
+  const timers = new Set();
+  const later = (fn, ms) => { const id = setTimeout(() => { timers.delete(id); fn(); }, ms); timers.add(id); };
+
+  // Nombre: cada letra sube desde una máscara, con retraso escalonado
+  let letterIndex = 0;
+  document.querySelectorAll("#bootName .bn-line").forEach((line) => {
+    line.innerHTML = [...line.dataset.t]
+      .map((ch) => `<span class="li" style="--i:${letterIndex++}">${ch}</span>`)
+      .join("");
+  });
+
+  // El log aparece línea por línea según el porcentaje alcanzado
+  const lines = [
+    { at: 0,  cls: "cmd", text: "boot --portfolio carlos" },
+    { at: 8,  cls: "ok",  text: "[ OK ] Entorno Java 21 cargado" },
+    { at: 24, cls: "ok",  text: "[ OK ] Spring Boot iniciado" },
+    { at: 44, cls: "ok",  text: "[ OK ] API REST en línea" },
+    { at: 62, cls: "ok",  text: "[ OK ] Base de datos conectada" },
+    { at: 80, cls: "ok",  text: "[ OK ] Angular compilado" },
+    { at: 96, cls: "ok",  text: "[ OK ] Portafolio listo" },
+  ];
+  const lineEls = lines.map((l) => {
+    const el = document.createElement("span");
+    el.className = "ln " + l.cls;
+    el.textContent = l.text;
+    logEl.appendChild(el);
+    return el;
+  });
+
+  // Carga con ritmo irregular, como una carga real: [ms, %]
+  const curve = [[0, 0], [350, 14], [700, 38], [950, 44], [1350, 72], [1600, 86], [1950, 100]];
+  const percentAt = (ms) => {
+    for (let i = 1; i < curve.length; i++) {
+      if (ms <= curve[i][0]) {
+        const [t0, p0] = curve[i - 1], [t1, p1] = curve[i];
+        return p0 + ((ms - t0) / (t1 - t0)) * (p1 - p0);
+      }
+    }
+    return 100;
+  };
+
+  function finish(fast) {
+    if (finished) return;
+    finished = true;
+    timers.forEach(clearTimeout);
+    document.removeEventListener("keydown", onKey);
+    bootEl.classList.add("stage-name", "is-open");
+    if (fast) bootEl.classList.add("is-fast");
+    setTimeout(endBoot, fast ? 420 : 900); // la cortina sube y revela el hero
+  }
+  function onKey(e) {
+    if (["Shift", "Control", "Alt", "Meta", "Tab"].includes(e.key)) return;
+    finish(true);
+  }
+  document.addEventListener("keydown", onKey);
+  skipBtn.addEventListener("click", (e) => { e.stopPropagation(); finish(true); });
+  bootEl.addEventListener("click", () => finish(true));
+  skipBtn.focus({ preventScroll: true });
+
+  const startedAt = performance.now();
+  let shown = 0;
+  (function tick() {
+    if (finished) return;
+    const elapsed = performance.now() - startedAt;
+    const pct = percentAt(elapsed);
+    const whole = Math.floor(pct);
+    numEl.textContent = String(whole).padStart(3, "0");
+    barEl.style.transform = `scaleX(${pct / 100})`;
+    while (shown < lines.length && whole >= lines[shown].at) lineEls[shown++].classList.add("on");
+
+    if (pct >= 100) {
+      bootEl.classList.add("stage-name");     // aparece el nombre gigante
+      later(() => finish(false), 1250);        // pausa para leerlo y sube la cortina
+      return;
+    }
+    later(tick, 16);
+  })();
+} else {
+  bootEl?.remove();
+  bootResolve();
+}
+
+
+
 /* ---- Tema claro / oscuro ---- */
 const themeToggle = document.getElementById("themeToggle");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
@@ -66,6 +171,43 @@ navToggle.addEventListener("click", () => {
 navLinks.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
 document.addEventListener("keydown", (e) => e.key === "Escape" && closeMenu());
 
+/* ---- Riel de progreso: línea SVG que se dibuja con el scroll ---- */
+const rail = document.getElementById("rail");
+const railFill = document.getElementById("railFill");
+const railDots = [...document.querySelectorAll(".nav-links a[data-section]")]
+  .map((a) => ({ section: document.getElementById(a.dataset.section), label: a.textContent.trim() }))
+  .filter((d) => d.section)
+  .map((d) => {
+    const dot = document.createElement("a");
+    dot.href = "#" + d.section.id;
+    dot.dataset.label = d.label;
+    dot.setAttribute("aria-label", d.label);
+    rail.appendChild(dot);
+    return { ...d, dot, top: 0 };
+  });
+
+function layoutRail() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  railDots.forEach((d) => {
+    d.top = Math.min(Math.max(d.section.offsetTop, 0), max);
+    d.dot.style.top = (max > 0 ? (d.top / max) * 100 : 0) + "%";
+  });
+}
+function updateRail(y, max) {
+  const p = max > 0 ? Math.min(Math.max(y / max, 0), 1) : 0;
+  railFill.style.clipPath = `inset(0 0 ${(1 - p) * 100}% 0)`;
+  let current = 0;
+  railDots.forEach((d, i) => {
+    const reached = y >= d.top - innerHeight * 0.4;
+    d.dot.classList.toggle("passed", reached);
+    if (reached) current = i;
+  });
+  railDots.forEach((d, i) => d.dot.classList.toggle("current", i === current));
+}
+layoutRail();
+new ResizeObserver(layoutRail).observe(document.body);
+window.addEventListener("load", layoutRail);
+
 /* ---- Header, barra de progreso y botón "arriba" ---- */
 const header = document.querySelector(".site-header");
 const progressBar = document.getElementById("scrollProgress");
@@ -77,6 +219,7 @@ function onScroll() {
   header.classList.toggle("scrolled", y > 10);
   progressBar.style.transform = `scaleX(${docHeight > 0 ? y / docHeight : 0})`;
   backToTop.classList.toggle("show", y > innerHeight * 0.8);
+  updateRail(y, docHeight);
   scrollTicking = false;
 }
 window.addEventListener(
@@ -130,6 +273,16 @@ document.querySelectorAll(".pv-cal").forEach((cal) => {
   });
 });
 
+/* ---- Títulos que se revelan palabra por palabra ---- */
+document.querySelectorAll(".split-title").forEach((el) => {
+  const text = el.textContent.trim();
+  el.setAttribute("aria-label", text);
+  el.innerHTML = text
+    .split(" ")
+    .map((w, i) => `<span class="w" aria-hidden="true"><span class="wi" style="--i:${i}">${w}</span></span>`)
+    .join(" ");
+});
+
 /* ---- Aparición al hacer scroll, con stagger por grupo ---- */
 document.querySelectorAll(".projects-grid, .stack-grid").forEach((group) => {
   group.querySelectorAll(".reveal").forEach((el, i) => {
@@ -148,7 +301,7 @@ const revealObserver = new IntersectionObserver(
   },
   { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
 );
-document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+document.querySelectorAll(".reveal, .split-title").forEach((el) => revealObserver.observe(el));
 
 /* ---- Contadores del hero (calculados desde el contenido real) ---- */
 const counts = {
@@ -170,9 +323,11 @@ function animateCounter(el, target) {
     if (t < 1) requestAnimationFrame(tick);
   })(start);
 }
-setTimeout(
-  () => Object.entries(counts).forEach(([id, n]) => animateCounter(document.getElementById(id), n)),
-  reduceMotion ? 0 : 450,
+bootReady.then(() =>
+  setTimeout(
+    () => Object.entries(counts).forEach(([id, n]) => animateCounter(document.getElementById(id), n)),
+    reduceMotion ? 0 : 450,
+  ),
 );
 
 /* ---- Rol que se escribe y borra en el hero ---- */
@@ -201,7 +356,7 @@ if (!reduceMotion) {
     typedRole.textContent = (deleting ? word : roles[roleIndex]).slice(0, charIndex);
     setTimeout(typeRole, deleting ? 35 : 70);
   }
-  setTimeout(typeRole, 2600);
+  bootReady.then(() => setTimeout(typeRole, 2600));
 }
 
 /* ---- Efecto de escritura en la terminal ---- */
@@ -264,6 +419,57 @@ filterButtons.forEach((btn) => {
     });
   });
 });
+
+/* ---- Cubo 3D de tecnologías: se arrastra y gira con inercia ----
+   Solo anima mientras está en pantalla. */
+const cubeWrap = document.getElementById("cubeWrap");
+const cube = document.getElementById("techCube");
+if (cubeWrap && cube) {
+  const AUTO = 0.35; // grados por frame (a 60 Hz) de giro automático
+  let rx = -22, ry = 32, vx = 0, vy = AUTO;
+  let dragging = false, lastX = 0, lastY = 0, rafId = null, lastT = 0;
+
+  const paint = () => (cube.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`);
+  paint();
+
+  function frame(now) {
+    const k = lastT ? Math.min((now - lastT) / 16.7, 4) : 1;
+    lastT = now;
+    if (!dragging) {
+      // la inercia del arrastre se apaga y el giro vuelve al automático
+      vy += (AUTO - vy) * 0.04 * k;
+      vx += (0 - vx) * 0.04 * k;
+      ry += vy * k;
+      rx += vx * k;
+      rx += (-22 - rx) * 0.01 * k; // vuelve despacio a una inclinación agradable
+    }
+    paint();
+    rafId = requestAnimationFrame(frame);
+  }
+  const start = () => { if (!rafId && !reduceMotion) { lastT = 0; rafId = requestAnimationFrame(frame); } };
+  const stop = () => { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } };
+
+  new IntersectionObserver((entries) => entries.forEach((e) => (e.isIntersecting ? start() : stop())), { threshold: 0.1 })
+    .observe(cubeWrap);
+
+  cubeWrap.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    lastX = e.clientX; lastY = e.clientY;
+    cubeWrap.setPointerCapture(e.pointerId);
+    cubeWrap.classList.add("dragging");
+  });
+  cubeWrap.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    vy = dx * 0.5; vx = -dy * 0.5;
+    ry += vy; rx += vx;
+    if (reduceMotion) paint();
+  });
+  const release = () => { dragging = false; cubeWrap.classList.remove("dragging"); };
+  cubeWrap.addEventListener("pointerup", release);
+  cubeWrap.addEventListener("pointercancel", release);
+}
 
 /* ---- Panel de detalle de proyectos ----
    Cada tarjeta guarda su detalle en .project-details (oculto); al abrirla se
@@ -382,6 +588,8 @@ if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").mat
     spot.setAttribute("aria-hidden", "true");
     card.prepend(spot);
 
+    const layerBack = card.querySelector(".project-preview");
+    const layerFront = card.querySelector(".project-footer");
     const cur = { rx: 0, ry: 0, lift: 0, sx: 0, sy: 0 };
     const target = { rx: 0, ry: 0, lift: 0, sx: 0, sy: 0 };
     let frame = null;
@@ -407,6 +615,10 @@ if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").mat
       // transform directo sobre cada elemento: no recalcula los estilos de toda la tarjeta
       spot.style.transform = `translate(${cur.sx}px, ${cur.sy}px)`;
       card.style.transform = `perspective(900px) translateY(${cur.lift}px) rotateX(${cur.rx}deg) rotateY(${cur.ry}deg)`;
+      // Capas a distinta profundidad: la vista previa y el título se desplazan
+      // distinto entre sí (usa `translate`, que no choca con el scale del hover)
+      layerBack.style.translate = `${cur.ry * 1.6}px ${-cur.rx * 1.6}px`;
+      layerFront.style.translate = `${cur.ry * 0.7}px ${-cur.rx * 0.7}px`;
 
       if (moving) {
         frame = requestAnimationFrame(tick);
@@ -417,6 +629,8 @@ if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").mat
       if (target.lift === 0) {
         card.style.transform = "";
         card.classList.remove("is-tilting");
+        layerBack.style.translate = "";
+        layerFront.style.translate = "";
       }
     }
     const start = () => {

@@ -1281,6 +1281,338 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 }
 
 /* =========================================================
+   INTRO · ARRANQUE DE SERVIDOR + CONTADOR GIGANTE
+   ========================================================= */
+.boot { display: none; }
+html.booting { overflow: hidden; }
+html.booting .boot { display: block; position: fixed; inset: 0; z-index: 300; }
+/* El hero espera a que termine la intro para hacer su entrada */
+html.booting .intro { animation-play-state: paused; }
+
+.boot-panel {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+  background-size: 28px 28px;
+  transition: transform 800ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+/* Franja de color que arrastra la cortina al subir */
+.boot-panel::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 14vh;
+  background: var(--gradient);
+}
+.boot.is-open .boot-panel { transform: translateY(calc(-100% - 14vh)); }
+
+.boot-log {
+  position: absolute;
+  top: clamp(20px, 5vw, 44px);
+  left: clamp(20px, 5vw, 44px);
+  width: min(560px, calc(100% - 40px));
+  font-family: var(--font-mono);
+  font-size: clamp(.74rem, 1.7vw, .9rem);
+  line-height: 1.9;
+  color: var(--text-muted);
+  transition: opacity 350ms var(--ease);
+}
+.boot-log .ln { display: block; opacity: 0; transform: translateY(6px); transition: opacity 200ms var(--ease), transform 200ms var(--ease); }
+.boot-log .ln.on { opacity: 1; transform: none; }
+.boot-log .ok { color: var(--ok); }
+.boot-log .cmd { color: var(--text); }
+.boot-log .cmd::before { content: '$ '; color: var(--accent-2); }
+.boot.stage-name .boot-log { opacity: 0; }
+
+.boot-count {
+  position: absolute;
+  right: clamp(16px, 4vw, 44px);
+  bottom: clamp(8px, 2vw, 24px);
+  display: flex;
+  align-items: flex-start;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(5.5rem, 24vw, 17rem);
+  line-height: .85;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  transition: opacity 400ms var(--ease), transform 600ms var(--ease);
+}
+.boot-count .pct { font-size: .32em; margin: .12em 0 0 .06em; letter-spacing: 0; color: var(--accent); }
+.boot.stage-name .boot-count { opacity: 0; transform: translateY(24px); }
+
+.boot-name {
+  position: absolute;
+  left: clamp(20px, 5vw, 44px);
+  top: 50%;
+  translate: 0 -50%;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 12.5vw, 9.5rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text);
+}
+.bn-line { display: block; overflow: hidden; padding-bottom: .14em; margin-bottom: -.06em; }
+.bn-line:nth-child(2) { color: var(--accent); }
+.bn-line .li {
+  display: inline-block;
+  transform: translateY(112%);
+  transition: transform 700ms var(--ease) calc(var(--i, 0) * 32ms);
+}
+.boot.stage-name .bn-line .li { transform: none; }
+.boot-role {
+  margin: 14px 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(.8rem, 2vw, 1.05rem);
+  font-weight: 400;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 500ms var(--ease) 450ms, transform 500ms var(--ease) 450ms;
+}
+.boot.stage-name .boot-role { opacity: 1; transform: none; }
+
+.boot-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--line); }
+.boot-bar i { display: block; height: 100%; background: var(--gradient); transform: scaleX(0); transform-origin: left; }
+
+.boot-skip {
+  position: absolute;
+  right: 20px; top: 20px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-solid);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  cursor: pointer;
+  transition: transform 160ms var(--ease), color 200ms ease, border-color 200ms ease, opacity 200ms ease;
+}
+.boot-skip kbd { font: inherit; font-size: .68rem; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--line-strong); }
+.boot-skip:hover { color: var(--text); border-color: var(--accent); }
+.boot-skip:active { transform: scale(0.97); }
+.boot.is-open .boot-skip { opacity: 0; pointer-events: none; }
+.boot.is-fast .boot-panel { transition-duration: 380ms; }
+
+/* =========================================================
+   EFECTOS DE SCROLL EN LAS VISTAS PREVIAS DE PROYECTOS
+   ========================================================= */
+/* Con scroll-driven animations (Chrome/Safari recientes) cada vista previa se abre
+   desde abajo y su contenido flota. Sin soporte, se muestran normales. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Vistas previas de proyectos: se abren desde abajo y su contenido flota */
+    .projects-grid .project-preview {
+      animation: maskOpenSoft linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 60%;
+    }
+    .projects-grid .project-preview > * {
+      animation: floatInner linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+    .projects-grid .project-preview > *:nth-child(even) { --fi-from: -9px; --fi-to: 9px; }
+  }
+}
+@keyframes maskOpenSoft {
+  from { clip-path: inset(0 0 100% 0 round 16px); }
+  to   { clip-path: inset(0 0 0 0 round 16px); }
+}
+@keyframes floatInner { from { translate: 0 var(--fi-from, 9px); } to { translate: 0 var(--fi-to, -9px); } }
+
+/* =========================================================
+   FASE 1 · PROFUNDIDAD, SCROLL Y 3D EN CSS
+   ========================================================= */
+
+/* ---- Red de nodos 3D del hero (canvas) ---- */
+.net {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 100vw;
+  translate: -50% 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1400ms var(--ease);
+  -webkit-mask-image: linear-gradient(#000 62%, transparent);
+          mask-image: linear-gradient(#000 62%, transparent);
+}
+.net.on { opacity: 1; }
+.net canvas { display: block; width: 100%; height: 100%; }
+.hero-photo, .hero-text { position: relative; z-index: 1; }
+
+/* ---- Hero que reacciona al scroll (CSS puro, sin JS) ----
+   Solo donde el navegador soporta scroll-driven animations y sin
+   "movimiento reducido". Usa translate/scale (propiedades individuales)
+   para no chocar con la animación de entrada ni con la flotación. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-photo.intro {
+      animation: introUp 600ms var(--ease) var(--d, 0s) forwards, heroPhotoOut linear both;
+      animation-timeline: auto, scroll(root);
+      animation-range: normal, 0 75vh;
+    }
+    .hero-text {
+      animation: heroTextOut linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 75vh;
+    }
+    .scroll-hint {
+      animation: fadeOutHint linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 20vh;
+    }
+  }
+}
+@keyframes heroPhotoOut { to { translate: -8% -6%; scale: .62; } }
+@keyframes heroTextOut  { to { translate: 0 -60px; opacity: .1; } }
+@keyframes fadeOutHint  { to { opacity: 0; } }
+
+/* ---- Títulos que se revelan palabra por palabra ---- */
+.split-title .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: .14em;
+  margin-bottom: -.14em;
+}
+.split-title .wi {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 600ms var(--ease) calc(var(--i, 0) * 50ms);
+}
+.split-title.is-visible .wi { transform: none; }
+
+/* ---- Riel de progreso (línea SVG que se dibuja con el scroll) ---- */
+.rail {
+  display: none;
+  position: fixed;
+  left: 18px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 24px;
+  height: 52vh;
+  z-index: 30;
+}
+@media (min-width: 1280px) { .rail { display: block; } }
+.rail svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.rail path { fill: none; stroke-width: 2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.rail-track path { stroke: var(--line-strong); }
+.rail-fill { clip-path: inset(0 0 100% 0); }
+.rail-fill path { stroke: var(--accent); }
+.rail a {
+  position: absolute;
+  left: 50%;
+  width: 12px; height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--line-strong);
+  transition: background-color 200ms ease, border-color 200ms ease, transform 160ms var(--ease);
+}
+.rail a.passed { border-color: var(--accent); }
+.rail a.current { background: var(--accent); transform: scale(1.25); }
+.rail a::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 22px; top: 50%;
+  translate: 0 -50%;
+  padding: 3px 9px;
+  border-radius: 100px;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  white-space: nowrap;
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms var(--ease);
+}
+.rail a:hover::after, .rail a:focus-visible::after { opacity: 1; }
+
+/* ---- Stack con cubo 3D ---- */
+.stack-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 28px;
+  align-items: center;
+}
+.stack-layout .stack-grid { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 960px) {
+  .stack-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .stack-layout .stack-grid { grid-template-columns: 1fr; }
+}
+.cube-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 270px;
+  perspective: 800px;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cube-wrap.dragging { cursor: grabbing; }
+.cube {
+  --s: 132px;
+  position: relative;
+  width: var(--s); height: var(--s);
+  transform-style: preserve-3d;
+  transform: rotateX(-22deg) rotateY(32deg);
+  will-change: transform;
+}
+.face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: var(--text);
+  border-radius: 16px;
+  border: 1.5px solid color-mix(in srgb, var(--c) 70%, transparent);
+  background:
+    radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--c) 28%, transparent), transparent 70%),
+    color-mix(in srgb, var(--surface-solid) 88%, transparent);
+  box-shadow: inset 0 0 28px color-mix(in srgb, var(--c) 16%, transparent);
+  /* Las caras traseras no se dibujan: sin texto espejado al fondo */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.f-front  { transform: translateZ(calc(var(--s) / 2)); }
+.f-back   { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+.f-right  { transform: rotateY(90deg)  translateZ(calc(var(--s) / 2)); }
+.f-left   { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+.f-top    { transform: rotateX(90deg)  translateZ(calc(var(--s) / 2)); }
+.f-bottom { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+.cube-hint {
+  position: absolute;
+  bottom: 6px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+}
+
+/* =========================================================
    STACK
    ========================================================= */
 .stack-grid {
@@ -1449,6 +1781,7 @@ a:focus-visible, button:focus-visible {
   .intro { animation-name: fadeIn; }
   .reveal { translate: none; }
   .project-card.is-entering { transform: none; }
+  .split-title .wi { transform: none; }
   .project-dialog, .project-dialog[open] { transform: none; }
   .cursor-glow { display: none; }
 }
